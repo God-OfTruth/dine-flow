@@ -1,0 +1,197 @@
+<div
+  class="flex h-full flex-col flex-auto items-center sm:justify-center min-w-0"
+>
+  <!-- Main -->
+  <div class="flex w-full h-full">
+    <div class="flex h-full border w-2/6">
+      <div class="flex w-full flex-col">
+        <!-- Current User -->
+        <div class="flex w-full flex-col gap-2 justify-center p-2 border">
+          <!-- User -->
+          <div class="flex justify-between p-1">
+            <div class="flex items-center gap-2 items-center">
+              <!-- User Avatar -->
+              <span
+                ><img
+                  class="w-7 h-7 rounded-full"
+                  *ngIf="showAvatar && user?.avatar"
+                  [src]="user?.avatar"
+                />
+                <mat-icon *ngIf="!showAvatar || !user?.avatar">
+                  <span class="material-symbols-outlined">
+                    account_circle
+                  </span></mat-icon
+                ></span
+              >
+              <div class="flex">
+                {{ user?.username }}
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <button
+                mat-icon-button
+                [matMenuTriggerFor]="menu"
+                aria-label="Example icon-button with a menu"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </div>
+          </div>
+          <!-- Search -->
+          <div class="flex w-full">
+            <mat-form-field
+              class="w-full border rounded-2xl"
+              appearance="outline"
+            >
+              <input matInput type="search" placeholder="Search..." />
+            </mat-form-field>
+          </div>
+        </div>
+        <!-- Contacts -->
+        <div class="flex h-[52rem] overflow-auto flex-col">
+          @if (contacts?.length) { @for (contact of contacts; track contact) {
+          <mat-list class="flex w-full h-fit hover:bg-blue-100" (click)="onChatSelection(contact)">
+            <div class="flex p-2">
+              <div class="flex h-full gap-4 items-center">
+                <span class="text-primary"
+                  ><img
+                    class="w-24 h-w-24 rounded-full"
+                    *ngIf="contact?.avatarId"
+                    [src]="contact?.avatarId"
+                  />
+                  <mat-icon *ngIf="!contact?.avatarId">
+                    <span class="material-symbols-outlined">
+                      account_circle
+                    </span></mat-icon
+                  ></span
+                >
+                <div class="flex flex-col gap-1">
+                  <div class="flex">
+                    {{ contact.username }}
+                  </div>
+                  <div class="flex">
+                    {{ contact.status }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- <div class="flex">
+                    <div class="flex">
+                      {{ contact.email }}
+                    </div>
+                  </div> -->
+            </div>
+          </mat-list>
+          <mat-divider class="w-ful h-1"></mat-divider>
+
+          } } @else {
+          <div class="flex justify-center text-primary text-3xl items-center h-full">No Contacts</div>
+          }
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col justify-between h-full border w-full">
+      <!-- Top Bar -->
+      <div class="flex p-2 border">
+        <!-- Selected Chat -->
+        <div class="flex w-full items-center gap-2 items-center">
+          <!-- User Avatar -->
+          <span
+            ><img
+              class="w-7 h-7 rounded-full"
+              *ngIf="showAvatar && selectedChat?.avatar"
+              [src]="selectedChat?.avatar"
+            />
+            <mat-icon class="w-fit h-fit" *ngIf="!showAvatar || !selectedChat?.avatar">
+              <span class="material-symbols-outlined">
+                account_circle
+              </span></mat-icon
+            ></span
+          >
+          <div class="flex">
+            {{ selectedChat?.username }}
+          </div>
+        </div>
+        <!-- Options -->
+        <div class="flex hover:border rounded-full hover:bg-blue-100">
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="userOptions"
+            aria-label="Example icon-button with a menu"
+          >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </div>
+      </div>
+      <!-- Chat Section -->
+      <div class="flex flex-1 border"></div>
+      <!-- Input Field -->
+      <div class="flex min-h-14">
+        <div class="flex w-1/12 border-r rounded-2xl">
+          <!-- Emoji -->
+          <button
+            mat-menu-item
+            matTooltip="Add Reaction"
+            matTooltipPosition="above"
+          >
+            <mat-icon color="primary"
+              ><span class="material-symbols-outlined">
+                add_reaction
+              </span></mat-icon
+            >
+          </button>
+          <button
+            mat-menu-item
+            mat-menu-item
+            matTooltip="Add Attachments"
+            matTooltipPosition="above"
+          >
+            <mat-icon color="primary"
+              ><span class="material-symbols-outlined">
+                attach_file_add
+              </span></mat-icon
+            >
+          </button>
+        </div>
+        <div class="flex flex-1">
+          <!-- Chat Input -->
+          <mat-form-field class="w-full" appearance="outline">
+            <input matInput type="text" placeholder="Chat..." />
+          </mat-form-field>
+        </div>
+        <div class="flex border-l rounded-2xl">
+          <!-- Action -->
+          <button
+            mat-menu-item
+            mat-menu-item
+            matTooltip="Send"
+            matTooltipPosition="above"
+          >
+            <mat-icon color="primary"
+              ><span class="material-symbols-outlined"> send </span></mat-icon
+            >
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-container>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>
+      <mat-icon
+        ><span class="material-symbols-outlined"> groups </span></mat-icon
+      >
+      <span>Create Group</span>
+    </button>
+  </mat-menu>
+  <mat-menu #userOptions="matMenu">
+    <button mat-menu-item>
+      <mat-icon
+        ><span class="material-symbols-outlined"> groups </span></mat-icon
+      >
+      <span>Contact Info</span>
+    </button>
+  </mat-menu>
+</ng-container>
