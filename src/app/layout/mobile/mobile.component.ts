@@ -1,11 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { BottomPanelComponent } from 'app/components/bottom-panel/bottom-panel.component';
 import { ToolbarComponent } from 'app/components/toolbar/toolbar.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ItemsListComponent } from 'app/components/items-list/items-list.component';
+import { MatDividerModule } from '@angular/material/divider';
 
 interface Transaction {
   id: string;
@@ -23,10 +26,13 @@ interface Transaction {
     MatTableModule,
     MatInputModule,
     MatButtonModule,
+    MatDialogModule,
+    MatDividerModule,
   ],
   templateUrl: './mobile.component.html',
 })
 export class MobileComponent {
+  private dialog = inject(MatDialog);
   displayedColumns: string[] = ['item', 'quantity', 'cost'];
   transactions: Transaction[] = [
     { id: '132', item: 'Beach ball', quantity: 1, cost: 4 },
@@ -43,6 +49,31 @@ export class MobileComponent {
     { id: '1032', item: 'Swim suit', quantity: 1, cost: 15 },
     { id: '1320', item: 'tea', quantity: 1, cost: 34 },
   ];
+
+  onAddBTN(e: void) {
+    console.log('onAddBTN');
+    this.dialog
+      .open(ItemsListComponent, {
+        data: {
+          animal: 'panda',
+        },
+        hasBackdrop: true,
+        backdropClass: 'bg-slate-900',
+        height: '90%',
+      })
+      .afterClosed()
+      .subscribe({
+        next: (res) => {
+          console.log('ItemsListComponent Success', res);
+        },
+        error: (err) => {
+          console.log('ItemsListComponent error', err);
+        },
+      });
+  }
+  onSubmitBTN(e: void) {
+    console.log('onSubmitBTN');
+  }
 
   addQuantity(selectedTransaction: Transaction) {
     const transaction = this.transactions.find(

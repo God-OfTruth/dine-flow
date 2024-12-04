@@ -1,0 +1,28 @@
+<mat-list role="list">
+  @for (item of items; track $index) {
+  <mat-list-item role="listitem">
+    <div class="flex justify-between items-center">
+      <div class="flex flex-col">
+        <div class="flex">
+          {{ item.name }}
+        </div>
+        <div class="flex text-xs text-gray-500">
+          {{ item.description }}
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <div class="flex flex-col items-center">
+          <div class="flex text-xs text-cyan-700">Cost</div>
+          <div class="flex">
+            {{ item.basePrice.amount - item.basePrice.discount }}
+          </div>
+        </div>
+        <div class="flex">
+          <button mat-mini-fab><mat-icon>add</mat-icon></button>
+        </div>
+      </div>
+    </div>
+  </mat-list-item>
+  <mat-divider [inset]="true"></mat-divider>
+  }
+</mat-list>

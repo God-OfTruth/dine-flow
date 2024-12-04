@@ -1,5 +1,6 @@
 <div class="flex flex-col">
   <app-toolbar class="sticky top-0"></app-toolbar>
+  <mat-divider [inset]="true"></mat-divider>
   <div>
     <table mat-table [dataSource]="transactions" class="w-full h-full">
       <!-- Item Column -->
@@ -61,5 +62,9 @@
       ></tr>
     </table>
   </div>
-  <app-bottom-panel class="sticky bottom-0"></app-bottom-panel>
+  <app-bottom-panel
+    class="sticky bottom-0"
+    (onAdd)="onAddBTN($event)"
+    (onSubmit)="onSubmitBTN($event)"
+  ></app-bottom-panel>
 </div>

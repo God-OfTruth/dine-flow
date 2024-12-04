@@ -1,9 +1,21 @@
 <mat-toolbar class="flex justify-evenly p-2" color="warn">
   <div class="flex gap-3 bg-inherit">
-    <button color="primary" mat-mini-fab extended>
+    <button
+      color="primary"
+      mat-mini-fab
+      extended
+      matTooltip="Add Items"
+      (click)="onAddBTN()"
+    >
       <mat-icon><mat-icon>add</mat-icon> Add Items</mat-icon>
     </button>
-    <button color="primary" mat-mini-fab extended>
+    <button
+      color="primary"
+      mat-mini-fab
+      extended
+      matTooltip="Submit"
+      (click)="onSubmitBTN()"
+    >
       <mat-icon><mat-icon>east</mat-icon> Submit</mat-icon>
     </button>
   </div>
