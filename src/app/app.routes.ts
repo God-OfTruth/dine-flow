@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { NoAuthGuard } from './core/guards/noAuth.guard';
 import { AuthGuard } from './core/guards/auth.guard';
-import { MobileComponent } from './layout/mobile/mobile.component';
 
 export const routes: Routes = [
   {
@@ -39,14 +38,24 @@ export const routes: Routes = [
     ],
   },
   {
-    path: '',
+    path: 'admin',
     canActivate: [AuthGuard],
     canActivateChild: [AuthGuard],
-    component: MobileComponent,
     children: [
       {
         path: 'home',
         loadChildren: () => import('app/modules/admin/home/home.routes'),
+      },
+    ],
+  },
+  {
+    path: '',
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
+    children: [
+      {
+        path: 'home',
+        loadChildren: () => import('app/modules/users/home/home.routes'),
       },
       {
         path: 'profile',

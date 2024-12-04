@@ -1,8 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import {
-  MatDialogTitle,
-  MatDialogContent,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
@@ -13,8 +11,6 @@ import { MatListModule } from '@angular/material/list';
   selector: 'app-items-list',
   imports: [
     CommonModule,
-    MatDialogTitle,
-    MatDialogContent,
     MatListModule,
     MatIconModule,
     MatDividerModule,

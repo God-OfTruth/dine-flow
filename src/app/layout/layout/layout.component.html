@@ -1,0 +1,29 @@
+<div class="flex flex-col h-full w-full">
+  <app-toolbar class="sticky top-0" (onMenu)="onMenuClick()"></app-toolbar>
+  <ng-container>
+    <mat-drawer-container class="h-full w-full gap-2" autosize>
+      <mat-drawer #drawer class="h-full pr-2 w-full" mode="side" opened="true">
+        <mat-list class="border border-slate-700 border-l-0 h-full rounded-2xl">
+          <!-- <div mat-subheader>Routes</div> -->
+          @for (route of routes; track route) {
+          <mat-list-item
+            (click)="onRouteSelection(route)"
+            class="hover:bg-slate-800"
+          >
+            <mat-icon matListItemIcon>{{ route.icon }}</mat-icon>
+            <div matListItemTitle>{{ route.name }}</div>
+            <div class="" matListItemLine>
+              <span class="text-sm text-gray-500">{{ route.description }}</span>
+            </div>
+          </mat-list-item>
+          }
+        </mat-list>
+      </mat-drawer>
+      <div class="h-full w-full border-slate-700 border p-2 rounded-2xl">
+        @switch(selectedRoute){ @case('tenants'){ tenants }
+        @case('restaurants'){ restaurants } @case('menus'){ menus }
+        @case('reports'){ reports } }
+      </div>
+    </mat-drawer-container>
+  </ng-container>
+</div>

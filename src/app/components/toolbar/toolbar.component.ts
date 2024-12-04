@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import {MatToolbarModule} from '@angular/material/toolbar';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-toolbar',
@@ -9,5 +9,9 @@ import {MatToolbarModule} from '@angular/material/toolbar';
   templateUrl: './toolbar.component.html',
 })
 export class ToolbarComponent {
+  @Output('onMenu') onMenu: EventEmitter<void> = new EventEmitter();
 
+  onMenuBTN() {
+    this.onMenu.emit();
+  }
 }

@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from 'app/modules/admin/home/home.component';
+import { LayoutComponent } from 'app/layout/layout/layout.component';
 
 export default [
     {
         path     : '',
-        component: HomeComponent,
+        component: LayoutComponent,
     },
 ] as Routes;
