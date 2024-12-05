@@ -4,6 +4,7 @@ import { ToolbarComponent } from 'app/components/toolbar/toolbar.component';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-layout',
@@ -13,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatSidenavModule,
     MatListModule,
     MatIconModule,
+    RouterOutlet,
   ],
   templateUrl: './layout.component.html',
 })
@@ -32,10 +34,17 @@ export class LayoutComponent {
     }[];
   }> = [
     {
+      id: 'home',
+      name: 'Home',
+      description: 'Home page',
+      selected: true,
+      icon: 'home',
+    },
+    {
       id: 'tenants',
       name: 'Tenants',
       description: 'Tenants Registered',
-      selected: true,
+      selected: false,
       icon: 'directions_alt',
     },
     {

@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { NoAuthGuard } from './core/guards/noAuth.guard';
 import { AuthGuard } from './core/guards/auth.guard';
+import { LayoutComponent } from './layout/layout/layout.component';
 
 export const routes: Routes = [
   {
@@ -41,10 +42,11 @@ export const routes: Routes = [
     path: 'admin',
     canActivate: [AuthGuard],
     canActivateChild: [AuthGuard],
+    component: LayoutComponent,
     children: [
       {
-        path: 'home',
-        loadChildren: () => import('app/modules/admin/home/home.routes'),
+        path: '',
+        loadChildren: () => import('app/modules/admin/admin.routes'),
       },
     ],
   },

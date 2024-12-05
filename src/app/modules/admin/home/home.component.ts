@@ -43,12 +43,9 @@ import { UserProfileService } from 'app/services/user-profile.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class HomeComponent implements OnInit {
-  private _socketService = inject(SocketService);
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   private _changeDetectorRef = inject(ChangeDetectorRef);
   private _userProfileService = inject(UserProfileService);
-  private _messageService = inject(ChatService);
-  private _router = inject(Router);
   private _userService = inject(UserService);
   showAvatar = false;
   /**
@@ -79,12 +76,6 @@ export class HomeComponent implements OnInit {
         this._changeDetectorRef.markForCheck();
       });
     this.getUserProfile();
-    this._socketService.addUser({
-      type: 'JOIN',
-      senderId: this.user?.id,
-      content: '',
-      isRead: true,
-    });
     this.contacts = [];
     this._changeDetectorRef.markForCheck();
   }
@@ -95,42 +86,7 @@ export class HomeComponent implements OnInit {
         .pipe(takeUntil(this._unsubscribeAll))
         .subscribe({
           next: (res) => {
-            console.log(
-              'this._userProfileService.getProfileById(this.user?.id)',
-              res
-            );
-            this.getAllFriends(res.friends);
-          },
-        });
-    }
-  }
-  getAllFriends(friends: Array<string>) {
-    this._userProfileService.getUsersByIds(friends).subscribe({
-      next: (res) => {
-        console.log('any', res);
-        this.contacts = res.map((user) => {
-          return {
-            id: user.id,
-            username: user.username,
-            avatarId: user.profilePictureUrl,
-            status: user.status,
-            email: user.email,
-          };
-        });
-      },
-    });
-  }
-  onChatSelection(contact: any) {
-    console.log('onChatSelection', contact);
-    this.selectedChat = contact;
-    console.log('selectedChat', this.selectedChat);
-    if (this.user?.id && this.selectedChat?.id) {
-      this._messageService
-        .getChatBySenderAndReceiver(this.user?.id, this.selectedChat?.id)
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe({
-          next: (res) => {
-            console.log('this.selectedChat?.id', res);
+            console.log('User Profile', res);
           },
         });
     }
