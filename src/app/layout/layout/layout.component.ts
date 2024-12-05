@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { ToolbarComponent } from 'app/components/toolbar/toolbar.component';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
-import { Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-layout',
@@ -18,9 +18,10 @@ import { Router, RouterOutlet } from '@angular/router';
   ],
   templateUrl: './layout.component.html',
 })
-export class LayoutComponent {
+export class LayoutComponent implements OnInit {
   @ViewChild('drawer') drawer?: MatDrawer;
   private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
   routes: Array<{
     id: string;
     name: string;
@@ -40,7 +41,7 @@ export class LayoutComponent {
       name: 'Home',
       description: 'Home page',
       selected: true,
-      uri: 'admin',
+      uri: '/admin',
       icon: 'home',
     },
     {
@@ -68,6 +69,11 @@ export class LayoutComponent {
       selected: false,
     },
   ];
+
+  ngOnInit(): void {
+    this.selectedRoute = this.router.url;
+    this.routes.forEach((r) => (r.selected = r.uri === this.selectedRoute));
+  }
 
   selectedRoute: string = this.routes[0].id;
   onMenuClick() {

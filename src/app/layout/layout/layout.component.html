@@ -5,7 +5,10 @@
       <mat-drawer #drawer class="h-full pr-2 w-full" mode="side" opened="true">
         <mat-list class="border border-slate-700 border-l-0 h-full rounded-2xl">
           @for (route of routes; track route) {
-          <div class="flex" [ngClass]="{ 'bg-slate-700': route.selected }">
+          <div
+            class="flex rounded-xl mx-2"
+            [ngClass]="{ 'bg-slate-700': route.selected }"
+          >
             <mat-list-item
               class="hover:bg-slate-800"
               (click)="onRouteSelection(route)"
