@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { ToolbarComponent } from 'app/components/toolbar/toolbar.component';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-layout',
@@ -20,12 +20,14 @@ import { RouterOutlet } from '@angular/router';
 })
 export class LayoutComponent {
   @ViewChild('drawer') drawer?: MatDrawer;
+  private router = inject(Router);
   routes: Array<{
     id: string;
     name: string;
     selected: boolean;
     description: string;
     icon: string;
+    uri: string;
     children?: {
       name: string;
       selected: boolean;
@@ -38,6 +40,7 @@ export class LayoutComponent {
       name: 'Home',
       description: 'Home page',
       selected: true,
+      uri: 'admin',
       icon: 'home',
     },
     {
@@ -45,6 +48,7 @@ export class LayoutComponent {
       name: 'Tenants',
       description: 'Tenants Registered',
       selected: false,
+      uri: '/admin/tenants',
       icon: 'directions_alt',
     },
     {
@@ -52,20 +56,15 @@ export class LayoutComponent {
       name: 'Restaurants',
       description: 'Handle all Restaurants',
       selected: false,
+      uri: '/admin/restaurants',
       icon: 'storefront',
-    },
-    {
-      id: 'menus',
-      name: 'Menu',
-      description: 'Handle Menu',
-      icon: 'menu_book',
-      selected: false,
     },
     {
       id: 'reports',
       name: 'Reports',
       description: 'View Reports',
       icon: 'search_insights',
+      uri: '/admin/reports',
       selected: false,
     },
   ];
@@ -85,7 +84,10 @@ export class LayoutComponent {
     selected: boolean;
     description: string;
     icon: string;
+    uri: string;
   }) {
     this.selectedRoute = route.id;
+    this.routes.forEach((r) => (r.selected = r.id === this.selectedRoute));
+    this.router.navigateByUrl(route.uri);
   }
 }
