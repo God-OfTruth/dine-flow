@@ -3,7 +3,9 @@
     <div class="flex w-full text-center justify-between">
       <div class="flex text-3xl">Tenants</div>
       <div class="flex">
-        <button mat-stroked-button>Create New Tenant</button>
+        <button mat-stroked-button (click)="onCreateTenant()">
+          Create New Tenant
+        </button>
       </div>
     </div>
     <div

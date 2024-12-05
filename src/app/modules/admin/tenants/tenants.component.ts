@@ -3,6 +3,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -10,6 +11,7 @@ import { TableComponent } from 'app/components/table/table.component';
 import { TableDataSource } from 'app/models/table.model';
 import { UsersService } from 'app/services/users.service';
 import { Subject, takeUntil } from 'rxjs';
+import { TenantComponent } from './tenant/tenant.component';
 
 @Component({
   selector: 'app-tenants',
@@ -29,6 +31,7 @@ import { Subject, takeUntil } from 'rxjs';
 export class TenantsComponent implements OnInit, OnDestroy {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   private _tenantService = inject(UsersService);
+  private dialog = inject(MatDialog);
 
   columns: Array<TableDataSource> = [
     {
@@ -90,6 +93,24 @@ export class TenantsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res) => {
           this.dataSource = res;
+        },
+      });
+  }
+
+  onCreateTenant() {
+    this.dialog
+      .open(TenantComponent, {
+        hasBackdrop: true,
+        backdropClass: 'backdrop-class',
+        disableClose: true,
+        // height: '80%',
+        width: '80%',
+      })
+      .afterClosed()
+      .subscribe({
+        next: (res) => {
+          console.log('onCreateTenant()', res);
+          this.getAllUsers();
         },
       });
   }

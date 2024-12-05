@@ -58,7 +58,7 @@ export class MobileComponent {
           animal: 'panda',
         },
         hasBackdrop: true,
-        backdropClass: 'bg-slate-900',
+        backdropClass: 'backdrop-class',
         height: '90%',
       })
       .afterClosed()

@@ -26,10 +26,12 @@ html {
     .mat-mdc-form-field-subscript-wrapper {
       display: none !important;
     }
-    .material-symbols-outlined {
-      // font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 40;
-      // font-size: xx-large;
-      // width: fit-content;
+    .cdk-overlay-pane.mat-mdc-dialog-panel {
+      max-width: 100%;
+    }
+    .backdrop-class {
+      background-color: cadetblue;
+      opacity: 0.3 !important;
     }
   }
 }

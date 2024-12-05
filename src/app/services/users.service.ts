@@ -12,4 +12,12 @@ export class UsersService {
   getAllUsers() {
     return this._http.get<any[]>(`${this.api_base}api/users`);
   }
+
+  createTenant(user: {
+    username: string;
+    mobileNumber: string;
+    email: string;
+  }) {
+    return this._http.post(`${this.api_base}api/users/owner`, user);
+  }
 }
