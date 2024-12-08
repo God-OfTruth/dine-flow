@@ -7,7 +7,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { TableComponent } from 'app/components/table/table.component';
+import {
+  TableClickEvent,
+  TableComponent,
+} from 'app/components/table/table.component';
 import { TableDataSource } from 'app/models/table.model';
 import { UsersService } from 'app/services/users.service';
 import { Subject, takeUntil } from 'rxjs';
@@ -72,6 +75,11 @@ export class TenantsComponent implements OnInit, OnDestroy {
           icon: 'visibility',
           text: 'View',
         },
+        {
+          id: 'ACTIVATE',
+          icon: 'switches',
+          text: 'Activate/Deactivate',
+        },
       ],
     },
   ];
@@ -115,8 +123,23 @@ export class TenantsComponent implements OnInit, OnDestroy {
       });
   }
 
-  onMenuClick(e: any) {
+  onMenuClick(e: TableClickEvent) {
     console.log('onMenuClick', e);
+    switch (e.type) {
+      case 'VIEW':
+        console.log('TableClickEvent', e);
+
+        break;
+      case 'ACTIVATE':
+        this.handleActiveDeactivate(e.row);
+    }
+  }
+  handleActiveDeactivate(row: any) {
+    this._tenantService.updateUserStatus(row.id, !row.enabled).subscribe({
+      next: (re) => {
+        console.log('enabled', re);
+      },
+    });
   }
 
   onSortChange(e: any) {

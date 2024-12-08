@@ -3,7 +3,9 @@
     <div class="flex w-full text-center justify-between">
       <div class="flex text-3xl">Restaurants</div>
       <div class="flex">
-        <button mat-stroked-button>Create New Restaurant</button>
+        <button mat-stroked-button (click)="onCreateRestaurant()">
+          Create New Restaurant
+        </button>
       </div>
     </div>
     <div

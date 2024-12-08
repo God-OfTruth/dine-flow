@@ -20,4 +20,11 @@ export class UsersService {
   }) {
     return this._http.post(`${this.api_base}api/users/owner`, user);
   }
+
+  updateUserStatus(userId: string, status: boolean) {
+    return this._http.post(
+      `${this.api_base}api/users/activate/${userId}/${status}`,
+      null
+    );
+  }
 }
