@@ -105,13 +105,13 @@ export class TenantsComponent implements OnInit, OnDestroy {
       });
   }
 
-  onCreateTenant() {
+  onCreateTenant(data = null) {
     this.dialog
       .open(TenantComponent, {
         hasBackdrop: true,
         backdropClass: 'backdrop-class',
         disableClose: true,
-        // height: '80%',
+        data: data,
         width: '80%',
       })
       .afterClosed()
@@ -128,7 +128,7 @@ export class TenantsComponent implements OnInit, OnDestroy {
     switch (e.type) {
       case 'VIEW':
         console.log('TableClickEvent', e);
-
+        this.onCreateTenant(e.row);
         break;
       case 'ACTIVATE':
         this.handleActiveDeactivate(e.row);

@@ -23,6 +23,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MenuService } from 'app/services/menu.service';
 import { ItemComponent } from './item/item.component';
 import { MatCardModule } from '@angular/material/card';
+import { Item } from 'app/models/items.model';
 
 @Component({
   selector: 'app-menu',
@@ -101,6 +102,24 @@ export class MenuComponent implements OnInit {
     //   sellCount: new FormControl(),
     // });
     // this.items.push(form);
+  }
+
+  onViewItem(item: Item) {
+    this.dialog
+      .open(ItemComponent, {
+        hasBackdrop: true,
+        backdropClass: 'backdrop-class',
+        disableClose: true,
+        data: item,
+        // height: '80%',
+        width: '80%',
+      })
+      .afterClosed()
+      .subscribe({
+        next: (item: any) => {
+          // this.items.push(item);
+        },
+      });
   }
 
   removeManager(i: number) {

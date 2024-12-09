@@ -11,8 +11,64 @@
         <input type="text" matInput formControlName="tagLine" />
       </mat-form-field>
       <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Medias</mat-label>
+        <mat-select formControlName="mediaIds" multiple>
+          @for (item of menuIds; track item) {
+          <mat-option [value]="item.value">{{ item.key }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="flex w-full p-4">
+      <mat-form-field class="w-full" appearance="outline">
         <mat-label>Description</mat-label>
-        <input type="text" matInput formControlName="description" />
+        <textarea type="text" matInput formControlName="description"></textarea>
+      </mat-form-field>
+    </div>
+    <div class="flex w-full gap-2 p-4">
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Menus</mat-label>
+        <mat-select formControlName="menuIds" multiple>
+          @for (item of menuIds; track item) {
+          <mat-option [value]="item.value">{{ item.key }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Managers</mat-label>
+        <mat-select formControlName="managers" multiple>
+          @for (item of managers; track item) {
+          <mat-option [value]="item.value">{{ item.key }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Staff</mat-label>
+        <mat-select formControlName="staffs" multiple>
+          @for (item of staffs; track item) {
+          <mat-option [value]="item.value">{{ item.key }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="flex w-full p-4 gap-2" formGroupName="address">
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Short Address</mat-label>
+        <input type="text" matInput formControlName="shortAddress" />
+      </mat-form-field>
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Locality</mat-label>
+        <input type="text" matInput formControlName="locality" />
+      </mat-form-field>
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Plus Code</mat-label>
+        <input type="text" matInput formControlName="plusCode" />
+      </mat-form-field>
+    </div>
+    <div class="flex w-full p-4" formGroupName="address">
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Full Address</mat-label>
+        <textarea type="text" matInput formControlName="fullAddress"></textarea>
       </mat-form-field>
     </div>
   </mat-dialog-content>

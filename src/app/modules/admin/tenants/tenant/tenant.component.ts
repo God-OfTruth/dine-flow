@@ -42,6 +42,7 @@ export class TenantComponent implements OnInit {
   });
   ngOnInit(): void {
     console.log('Create new Tenant', this.data);
+    this.userForm.patchValue(this.data);
   }
 
   onSave() {

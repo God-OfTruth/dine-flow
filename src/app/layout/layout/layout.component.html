@@ -2,7 +2,7 @@
   <app-toolbar class="sticky top-0" (onMenu)="onMenuClick()"></app-toolbar>
   <ng-container>
     <mat-drawer-container class="h-full w-full gap-2" autosize>
-      <mat-drawer #drawer class="h-full pr-2 w-full" mode="side" opened="false">
+      <mat-drawer #drawer class="h-full pr-2 w-full" mode="side" opened="true">
         <mat-list class="border border-slate-700 border-l-0 h-full rounded-2xl">
           @for (route of routes; track route) {
           <div

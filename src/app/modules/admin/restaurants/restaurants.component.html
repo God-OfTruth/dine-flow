@@ -24,7 +24,13 @@
         <!-- Need to Update -->
         <img mat-card-image src="assets/blacklabra.webp" />
         <mat-card-actions>
-          <button mat-button appearance="outlined">View</button>
+          <button
+            mat-button
+            appearance="outlined"
+            (click)="onViewRestaurant(restaurant)"
+          >
+            View
+          </button>
           <button mat-button appearance="outlined">Update</button>
         </mat-card-actions>
       </mat-card>
