@@ -1,0 +1,66 @@
+<div class="flex flex-col h-full w-full py-4 px-8">
+  <div mat-dialog-title class="flex w-full justify-start">
+    Create/Update Menu
+  </div>
+  <mat-dialog-content class="flex flex-col w-full gap-4" [formGroup]="form">
+    <div class="flex w-full gap-2 p-4 items-center">
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Name</mat-label>
+        <input type="text" matInput formControlName="name" />
+      </mat-form-field>
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Restaurants</mat-label>
+        <mat-select formControlName="restaurantIds" multiple>
+          @for (restaurant of restaurants; track restaurant) {
+          <mat-option [value]="restaurant.value">{{
+            restaurant.key
+          }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <div class="flex w-full items-center justify-center">
+        <label>Is Active</label>
+        <mat-checkbox formControlName="active"></mat-checkbox>
+      </div>
+    </div>
+    <div class="flex w-full gap-2 p-4">
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea type="text" matInput formControlName="description"></textarea>
+      </mat-form-field>
+    </div>
+    @if(items.length){
+    <div class="flex gap-2 w-full h-80 p-4 overflow-auto" formArrayName="items">
+      @for (item of items; track $index) {
+      <!-- <div class="flex gap-2"> -->
+      <mat-card class="w-1/6 h-fit" appearance="outlined">
+        <mat-card-header>
+          <div
+            mat-card-avatar
+            class="bg-[url('https://material.angular.io/assets/img/examples/shiba1.jpg')] bg-cover"
+          ></div>
+          <mat-card-title>{{ item.name }}</mat-card-title>
+          <mat-card-subtitle>{{ item.description }}</mat-card-subtitle>
+        </mat-card-header>
+        <!-- Need to Update -->
+        <img mat-card-image src="assets/blacklabra.webp" />
+        <mat-card-actions>
+          <button mat-button appearance="outlined">View</button>
+          <button mat-button appearance="outlined">Update</button>
+        </mat-card-actions>
+      </mat-card>
+      <!-- </div> -->
+      }
+    </div>
+    }
+    <div class="flex justify-center items-center w-full">
+      <button class="w-full" mat-flat-button (click)="addItems()">Add</button>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-stroked-button mat-dialog-close>Cancel</button>
+    <button mat-button (click)="onSave()" [disabled]="form.invalid">
+      Save
+    </button>
+  </mat-dialog-actions>
+</div>

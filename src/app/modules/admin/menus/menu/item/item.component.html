@@ -1,0 +1,45 @@
+<div class="flex flex-col h-full w-full py-4 px-8">
+  <div mat-dialog-title class="flex w-full justify-start">
+    Create/Update Item
+  </div>
+  <mat-dialog-content class="flex flex-col w-full gap-4" [formGroup]="form">
+    <div class="flex w-full gap-2 p-4 items-center">
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Name</mat-label>
+        <input type="text" matInput formControlName="name" />
+      </mat-form-field>
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Medias</mat-label>
+        <mat-select formControlName="mediaIds" multiple>
+          @for (item of mediaIds; track item) {
+          <mat-option [value]="item.value">{{ item.key }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Sell Count</mat-label>
+        <input type="number" matInput formControlName="sellCount" />
+      </mat-form-field>
+      <div class="flex w-full items-center justify-start">
+        <label>Is Active</label>
+        <mat-checkbox formControlName="enabled"></mat-checkbox>
+      </div>
+    </div>
+    <div class="flex w-full gap-2" formGroupName="basePrice">
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Amount</mat-label>
+        <input type="number" matInput formControlName="amount" />
+      </mat-form-field>
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Discount</mat-label>
+        <input type="number" matInput formControlName="discount" />
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-stroked-button mat-dialog-close>Cancel</button>
+    <button mat-button (click)="onSave()" [disabled]="form.invalid">
+      Save
+    </button>
+  </mat-dialog-actions>
+</div>

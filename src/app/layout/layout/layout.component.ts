@@ -61,6 +61,14 @@ export class LayoutComponent implements OnInit {
       icon: 'storefront',
     },
     {
+      id: 'menus',
+      name: 'Menus',
+      description: 'Handle all Menu',
+      selected: false,
+      uri: '/admin/menus',
+      icon: 'menu_book',
+    },
+    {
       id: 'reports',
       name: 'Reports',
       description: 'View Reports',

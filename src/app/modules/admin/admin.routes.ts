@@ -4,6 +4,7 @@ import { HomeComponent } from 'app/modules/admin/home/home.component';
 import { TenantsComponent } from './tenants/tenants.component';
 import { RestaurantsComponent } from './restaurants/restaurants.component';
 import { ReportsComponent } from './reports/reports.component';
+import { MenusComponent } from './menus/menus.component';
 
 export default [
   {
@@ -21,6 +22,10 @@ export default [
   {
     path: 'restaurants',
     component: RestaurantsComponent,
+  },
+  {
+    path: 'menus',
+    component: MenusComponent,
   },
   {
     path: 'reports',

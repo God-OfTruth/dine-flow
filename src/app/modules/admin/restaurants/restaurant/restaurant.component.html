@@ -1,0 +1,25 @@
+<div class="flex flex-col h-full w-full py-4 px-8">
+  <div mat-dialog-title class="flex w-full justify-start">Restaurants</div>
+  <mat-dialog-content class="flex flex-col w-full gap-4" [formGroup]="form">
+    <div class="flex w-full gap-2 p-4">
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Name</mat-label>
+        <input type="text" matInput formControlName="name" />
+      </mat-form-field>
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Tag Line</mat-label>
+        <input type="text" matInput formControlName="tagLine" />
+      </mat-form-field>
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Description</mat-label>
+        <input type="text" matInput formControlName="description" />
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-stroked-button mat-dialog-close>Cancel</button>
+    <button mat-button (click)="onSave()" [disabled]="form.invalid">
+      Save
+    </button>
+  </mat-dialog-actions>
+</div>
