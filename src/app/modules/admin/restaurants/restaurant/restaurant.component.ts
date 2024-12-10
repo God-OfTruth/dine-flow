@@ -21,6 +21,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MenuService } from 'app/services/menu.service';
 import { Subject, takeUntil } from 'rxjs';
+import { UsersService } from 'app/services/users.service';
 
 @Component({
   selector: 'app-restaurant',
@@ -42,6 +43,7 @@ export class RestaurantComponent implements OnInit {
   private _dialogRef = inject(MatDialogRef<TenantComponent>);
   private _restaurantService = inject(RestaurantsService);
   private _menuService = inject(MenuService);
+  private _tenantService = inject(UsersService);
   private data = inject(MAT_DIALOG_DATA);
 
   form = new FormGroup({
@@ -80,9 +82,30 @@ export class RestaurantComponent implements OnInit {
   }[] = [];
 
   ngOnInit(): void {
-    console.log('Data', this.data);
     this.getAllMenus();
+    this.getAllUsers();
     this.form.patchValue(this.data);
+  }
+  getAllUsers() {
+    this._tenantService
+      .getAllUsers()
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe({
+        next: (res) => {
+          this.managers = res.map((user) => {
+            return {
+              key: user.username,
+              value: user.id,
+            };
+          });
+          this.staffs = res.map((user) => {
+            return {
+              key: user.username,
+              value: user.id,
+            };
+          });
+        },
+      });
   }
   getAllMenus() {
     this._menuService
@@ -101,7 +124,6 @@ export class RestaurantComponent implements OnInit {
   }
 
   onSave() {
-    console.log('onSave()', this.form.value);
     if (this.form.valid) {
       const val = this.form.value;
       this._restaurantService
@@ -113,7 +135,6 @@ export class RestaurantComponent implements OnInit {
           address: {
             fullAddress: val.address?.fullAddress ?? '',
             locality: val.address?.locality ?? '',
-            // mapsUrls: val.address?.mapsUrls ?? {},
             plusCode: val.address?.plusCode ?? '',
             shortAddress: val.address?.shortAddress ?? '',
           },

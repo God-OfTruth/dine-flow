@@ -46,7 +46,6 @@ export class RestaurantsComponent {
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe({
         next: (res) => {
-          console.log('_restaurantService', res);
           this.dataSource = res;
         },
       });
@@ -64,7 +63,6 @@ export class RestaurantsComponent {
       .afterClosed()
       .subscribe({
         next: (res) => {
-          console.log('onCreateRestaurant()', res);
           this.getAllRestaurants();
         },
       });
@@ -77,13 +75,11 @@ export class RestaurantsComponent {
         backdropClass: 'backdrop-class',
         disableClose: true,
         data: restaurant,
-        // height: '80%',
         width: '80%',
       })
       .afterClosed()
       .subscribe({
         next: (res) => {
-          console.log('onCreateRestaurant()', res);
           this.getAllRestaurants();
         },
       });
