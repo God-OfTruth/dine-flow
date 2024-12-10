@@ -56,14 +56,14 @@ export class TenantsComponent implements OnInit, OnDestroy {
       header: 'Enabled',
       columnDef: 'enabled',
       cell: (ele: any) => {
-        return ele?.enabled ?? 'N/A';
+        return ele?.enabled ? 'Enabled' : 'Disabled';
       },
     },
     {
       header: 'External',
       columnDef: 'externalAccount',
       cell: (ele: any) => {
-        return ele?.externalAccount ?? 'N/A';
+        return ele?.externalAccount ? 'External' : 'Internal';
       },
     },
     {

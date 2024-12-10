@@ -65,7 +65,7 @@ export class MenuComponent implements OnInit {
   ngOnInit(): void {
     console.log('data', this.data);
     this.form.patchValue(this.data);
-    this.items = this.data.items;
+    this.items = this.data?.items ?? [];
   }
 
   // get items(): FormArray {

@@ -1,11 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import {
   MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogRef,
 } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
+import { MatListModule, MatListOption } from '@angular/material/list';
+import { Menu } from 'app/models/menu.model';
 
 @Component({
   selector: 'app-items-list',
@@ -14,236 +18,29 @@ import { MatListModule } from '@angular/material/list';
     MatListModule,
     MatIconModule,
     MatDividerModule,
+    MatDialogModule,
+    MatButtonModule,
   ],
   templateUrl: './items-list.component.html',
 })
 export class ItemsListComponent implements OnInit {
-  private data = inject(MAT_DIALOG_DATA);
+  @ViewChild('menuItems') menuItems: any;
+  private data: Menu[] = inject(MAT_DIALOG_DATA);
+  private _dialogRef = inject(MatDialogRef<ItemsListComponent>);
 
-  items: Array<{
-    id: string;
-    name: string;
-    description: string;
-    mainMediaId: string;
-    basePrice: {
-      amount: number;
-      discount: number;
-    };
-    enabled: boolean;
-    tags: string[];
-    sellCount: number;
-  }> = [
-    {
-      id: '1',
-      name: 'Tea',
-      basePrice: {
-        amount: 10,
-        discount: 0,
-      },
-      description: 'Tea for Developers',
-      enabled: true,
-      mainMediaId: '',
-      sellCount: 10,
-      tags: ['hot_drinks'],
-    },
-    {
-      id: '1',
-      name: 'Ginger Tea',
-      basePrice: {
-        amount: 10,
-        discount: 0,
-      },
-      description: 'Ginger Tea for Developers',
-      enabled: true,
-      mainMediaId: '',
-      sellCount: 10,
-      tags: ['hot_drinks'],
-    },
-    {
-      id: '1',
-      name: 'Tea',
-      basePrice: {
-        amount: 10,
-        discount: 0,
-      },
-      description: 'Tea for Developers',
-      enabled: true,
-      mainMediaId: '',
-      sellCount: 10,
-      tags: ['hot_drinks'],
-    },
-    {
-      id: '1',
-      name: 'Ginger Tea',
-      basePrice: {
-        amount: 10,
-        discount: 0,
-      },
-      description: 'Ginger Tea for Developers',
-      enabled: true,
-      mainMediaId: '',
-      sellCount: 10,
-      tags: ['hot_drinks'],
-    },
-    {
-      id: '1',
-      name: 'Tea',
-      basePrice: {
-        amount: 10,
-        discount: 0,
-      },
-      description: 'Tea for Developers',
-      enabled: true,
-      mainMediaId: '',
-      sellCount: 10,
-      tags: ['hot_drinks'],
-    },
-    {
-      id: '1',
-      name: 'Ginger Tea',
-      basePrice: {
-        amount: 10,
-        discount: 0,
-      },
-      description: 'Ginger Tea for Developers',
-      enabled: true,
-      mainMediaId: '',
-      sellCount: 10,
-      tags: ['hot_drinks'],
-    },
-    {
-      id: '1',
-      name: 'Tea',
-      basePrice: {
-        amount: 10,
-        discount: 0,
-      },
-      description: 'Tea for Developers',
-      enabled: true,
-      mainMediaId: '',
-      sellCount: 10,
-      tags: ['hot_drinks'],
-    },
-    {
-      id: '1',
-      name: 'Ginger Tea',
-      basePrice: {
-        amount: 10,
-        discount: 0,
-      },
-      description: 'Ginger Tea for Developers',
-      enabled: true,
-      mainMediaId: '',
-      sellCount: 10,
-      tags: ['hot_drinks'],
-    },
-    {
-      id: '1',
-      name: 'Tea',
-      basePrice: {
-        amount: 10,
-        discount: 0,
-      },
-      description: 'Tea for Developers',
-      enabled: true,
-      mainMediaId: '',
-      sellCount: 10,
-      tags: ['hot_drinks'],
-    },
-    {
-      id: '1',
-      name: 'Ginger Tea',
-      basePrice: {
-        amount: 10,
-        discount: 0,
-      },
-      description: 'Ginger Tea for Developers',
-      enabled: true,
-      mainMediaId: '',
-      sellCount: 10,
-      tags: ['hot_drinks'],
-    },
-    {
-      id: '1',
-      name: 'Tea',
-      basePrice: {
-        amount: 10,
-        discount: 0,
-      },
-      description: 'Tea for Developers',
-      enabled: true,
-      mainMediaId: '',
-      sellCount: 10,
-      tags: ['hot_drinks'],
-    },
-    {
-      id: '1',
-      name: 'Ginger Tea',
-      basePrice: {
-        amount: 10,
-        discount: 0,
-      },
-      description: 'Ginger Tea for Developers',
-      enabled: true,
-      mainMediaId: '',
-      sellCount: 10,
-      tags: ['hot_drinks'],
-    },
-    {
-      id: '1',
-      name: 'Tea',
-      basePrice: {
-        amount: 10,
-        discount: 0,
-      },
-      description: 'Tea for Developers',
-      enabled: true,
-      mainMediaId: '',
-      sellCount: 10,
-      tags: ['hot_drinks'],
-    },
-    {
-      id: '1',
-      name: 'Ginger Tea',
-      basePrice: {
-        amount: 10,
-        discount: 0,
-      },
-      description: 'Ginger Tea for Developers',
-      enabled: true,
-      mainMediaId: '',
-      sellCount: 10,
-      tags: ['hot_drinks'],
-    },
-    {
-      id: '1',
-      name: 'Tea',
-      basePrice: {
-        amount: 10,
-        discount: 0,
-      },
-      description: 'Tea for Developers',
-      enabled: true,
-      mainMediaId: '',
-      sellCount: 10,
-      tags: ['hot_drinks'],
-    },
-    {
-      id: '1',
-      name: 'Ginger Tea',
-      basePrice: {
-        amount: 10,
-        discount: 0,
-      },
-      description: 'Ginger Tea for Developers',
-      enabled: true,
-      mainMediaId: '',
-      sellCount: 10,
-      tags: ['hot_drinks'],
-    },
-  ];
+  items: Array<Menu> = [];
 
   ngOnInit(): void {
-    console.log('MatDialogTitle, MatDialogContent', this.data);
+    this.items = this.data;
+  }
+
+  onSave(items: MatListOption[]) {
+    console.log(
+      'shoes',
+      items,
+      items.map((i) => i.value)
+    );
+    const selectedItems = items.map((i) => i.value);
+    this._dialogRef.close(selectedItems);
   }
 }

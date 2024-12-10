@@ -1,7 +1,7 @@
-<div class="flex flex-col">
+<div class="flex h-full w-full flex-col">
   <app-toolbar class="sticky top-0"></app-toolbar>
   <mat-divider [inset]="true"></mat-divider>
-  <div>
+  <div class="w-full h-full">
     <table mat-table [dataSource]="transactions" class="w-full h-full">
       <!-- Item Column -->
       <ng-container matColumnDef="item">

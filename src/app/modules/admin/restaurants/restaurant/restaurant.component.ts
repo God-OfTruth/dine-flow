@@ -19,6 +19,8 @@ import { TenantComponent } from '../../tenants/tenant/tenant.component';
 import { RestaurantsService } from 'app/services/restaurants.service';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import { MenuService } from 'app/services/menu.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-restaurant',
@@ -36,8 +38,10 @@ import { MatSelectModule } from '@angular/material/select';
   templateUrl: './restaurant.component.html',
 })
 export class RestaurantComponent implements OnInit {
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   private _dialogRef = inject(MatDialogRef<TenantComponent>);
   private _restaurantService = inject(RestaurantsService);
+  private _menuService = inject(MenuService);
   private data = inject(MAT_DIALOG_DATA);
 
   form = new FormGroup({
@@ -45,9 +49,9 @@ export class RestaurantComponent implements OnInit {
     name: new FormControl('', [Validators.required]),
     tagLine: new FormControl('', [Validators.required]),
     description: new FormControl('', [Validators.required]),
-    menuIds: new FormControl([]),
-    managers: new FormControl([]),
-    staffs: new FormControl([]),
+    menuIds: new FormControl(),
+    managers: new FormControl(),
+    staffs: new FormControl(),
     mediaIds: new FormControl(),
     address: new FormGroup({
       fullAddress: new FormControl('', []),
@@ -77,7 +81,23 @@ export class RestaurantComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('Data', this.data);
+    this.getAllMenus();
     this.form.patchValue(this.data);
+  }
+  getAllMenus() {
+    this._menuService
+      .getAllMenus()
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe({
+        next: (res) => {
+          this.menuIds = res.map((menu) => {
+            return {
+              key: menu.name,
+              value: menu.id,
+            };
+          });
+        },
+      });
   }
 
   onSave() {
@@ -97,11 +117,11 @@ export class RestaurantComponent implements OnInit {
             plusCode: val.address?.plusCode ?? '',
             shortAddress: val.address?.shortAddress ?? '',
           },
-          managers: [],
-          mediaIds: [],
-          menuIds: [],
+          managers: val.managers,
+          mediaIds: val.mediaIds,
+          menuIds: val.menuIds,
           ownerId: null,
-          staffs: [],
+          staffs: val.staffs,
         })
         .subscribe({
           next: (res) => {

@@ -15,6 +15,6 @@ export class RestaurantsService {
   }
 
   createRestaurant(restaurant: Restaurant) {
-    return this._http.post(`${this.api_base}api/restaurants`, restaurant);
+    return this._http.post<any>(`${this.api_base}api/restaurants`, restaurant);
   }
 }

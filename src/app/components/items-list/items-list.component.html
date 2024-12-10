@@ -1,28 +1,44 @@
-<mat-list role="list">
-  @for (item of items; track $index) {
-  <mat-list-item role="listitem">
-    <div class="flex justify-between items-center">
-      <div class="flex flex-col">
-        <div class="flex">
-          {{ item.name }}
-        </div>
-        <div class="flex text-xs text-gray-500">
-          {{ item.description }}
-        </div>
-      </div>
-      <div class="flex gap-2">
-        <div class="flex flex-col items-center">
-          <div class="flex text-xs text-cyan-700">Cost</div>
-          <div class="flex">
-            {{ item.basePrice.amount - item.basePrice.discount }}
+<div class="flex flex-col h-full w-full">
+  <mat-dialog-content class="flex flex-col w-full gap-4">
+    @for (menu of items; track menu) {
+    <mat-selection-list #menuItems>
+      @for (item of menu.items; track item) {
+      <mat-list-option [value]="item"
+        ><div class="flex justify-between items-center">
+          <div class="flex flex-col">
+            <div class="flex">
+              {{ item.name }}
+            </div>
+            <div class="flex text-xs text-gray-500">
+              {{ item.description }}
+            </div>
           </div>
-        </div>
-        <div class="flex">
-          <button mat-mini-fab><mat-icon>add</mat-icon></button>
-        </div>
-      </div>
-    </div>
-  </mat-list-item>
-  <mat-divider [inset]="true"></mat-divider>
-  }
-</mat-list>
+          <div class="flex gap-2">
+            <div class="flex flex-col items-center">
+              <div class="flex text-xs text-cyan-700">
+                <span>Cost</span>/ <span>Discount</span>
+              </div>
+              <div class="flex">
+                <span class="flex">
+                  {{ item.basePrice.amount }}
+                </span>
+                <span>/</span>
+                <span class="flex">
+                  {{ item.basePrice.discount }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div></mat-list-option
+      >
+      }
+    </mat-selection-list>
+    }
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-mini-fab mat-dialog-close><mat-icon>cancel</mat-icon></button>
+    <button mat-mini-fab (click)="onSave(menuItems.selectedOptions.selected)">
+      <mat-icon>check_circle</mat-icon>
+    </button>
+  </mat-dialog-actions>
+</div>
