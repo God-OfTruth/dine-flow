@@ -10,11 +10,18 @@ export class UserProfileService {
   private _http = inject(HttpClient);
   constructor() {}
 
-  getProfileById(id: string){
-    return this._http.get<any>(`${this.api_base}api/profile/${id}`)
+  getProfileById(id: string) {
+    return this._http.get<any>(`${this.api_base}api/profile/${id}`);
   }
 
-  getUsersByIds(ids: Array<string>){
-    return this._http.post<Array<any>>(`${this.api_base}api/users/ids`, ids)
+  getUsersByIds(ids: Array<string>) {
+    return this._http.post<Array<any>>(`${this.api_base}api/users/ids`, ids);
+  }
+
+  updateRestaurantLicensed(userProfileId: string, count: number) {
+    return this._http.post(
+      `${this.api_base}api/profile/update-licensed-restaurant/${userProfileId}/${count}`,
+      null
+    );
   }
 }

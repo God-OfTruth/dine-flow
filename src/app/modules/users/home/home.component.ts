@@ -1,138 +1,190 @@
 import { CommonModule } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   inject,
+  OnDestroy,
   OnInit,
-  ViewEncapsulation,
 } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatCardModule } from '@angular/material/card';
-import { MatListModule } from '@angular/material/list';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { Router } from '@angular/router';
-import { UserService } from 'app/core/user/user.service';
-import { User } from 'app/core/user/user.types';
+import { MatTableModule } from '@angular/material/table';
+import { BottomPanelComponent } from 'app/components/bottom-panel/bottom-panel.component';
+import { ToolbarComponent } from 'app/components/toolbar/toolbar.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ItemsListComponent } from 'app/components/items-list/items-list.component';
+import { MatDividerModule } from '@angular/material/divider';
+import { MenuService } from 'app/services/menu.service';
 import { Subject, takeUntil } from 'rxjs';
-import { ChatService } from 'app/services/chat.service';
-import { SocketService } from 'app/services/socket.service';
-import { UserProfileService } from 'app/services/user-profile.service';
+import { Menu } from 'app/models/menu.model';
+import { Item } from 'app/models/items.model';
+import { Transaction, TransactionSlip } from 'app/models/transaction.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TransactionComponent } from 'app/components/transaction/transaction.component';
 
 @Component({
   selector: 'home',
   standalone: true,
   imports: [
     CommonModule,
-    MatInputModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
+    ToolbarComponent,
+    BottomPanelComponent,
     MatIconModule,
+    MatTableModule,
+    MatInputModule,
+    MatButtonModule,
+    MatDialogModule,
     MatDividerModule,
-    MatCardModule,
-    MatListModule,
-    MatMenuModule,
-    MatTooltipModule,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home.component.html',
-  encapsulation: ViewEncapsulation.None,
 })
-export class HomeComponent implements OnInit {
-  private _socketService = inject(SocketService);
+export class HomeComponent implements OnInit, OnDestroy {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  private _changeDetectorRef = inject(ChangeDetectorRef);
-  private _userProfileService = inject(UserProfileService);
-  private _messageService = inject(ChatService);
-  private _router = inject(Router);
-  private _userService = inject(UserService);
-  showAvatar = false;
-  /**
-   * Constructor
-   */
+  private _menuService = inject(MenuService);
 
-  contacts?: Array<{
-    id: string;
-    username: string;
-    email: string;
-    status: string;
-    avatarId: string;
-  }>;
-
-  user?: User;
-  selectedChat?: User;
-
-  constructor() {}
+  private cdr = inject(ChangeDetectorRef);
+  private dialog = inject(MatDialog);
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+  displayedColumns: string[] = ['item', 'quantity', 'cost'];
+  transactions: Transaction[] = [];
+  menus?: Menu[];
+  restaurantId?: string;
+  ngOnDestroy(): void {
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
+  }
 
   ngOnInit(): void {
-    this._userService.user$
+    this.activatedRoute.paramMap
       .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((user: User) => {
-        this.user = user;
-        console.log('showAvatar', user);
-
-        // Mark for check
-        this._changeDetectorRef.markForCheck();
+      .subscribe((res) => {
+        if (res.has('id')) {
+          this.restaurantId = res.get('id')?.toString();
+        }
       });
-    this.getUserProfile();
-    this._socketService.addUser({
-      type: 'JOIN',
-      senderId: this.user?.id,
-      content: '',
-      isRead: true,
-    });
-    this.contacts = [];
-    this._changeDetectorRef.markForCheck();
+    this.getMenuByRestaurant();
   }
-  getUserProfile() {
-    if (this.user?.profileId) {
-      this._userProfileService
-        .getProfileById(this.user?.profileId)
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe({
-          next: (res) => {
-            console.log(
-              'this._userProfileService.getProfileById(this.user?.id)',
-              res
-            );
-            this.getAllFriends(res.friends);
-          },
-        });
+  getMenuByRestaurant() {
+    this._menuService
+      .getAllMenus()
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe({
+        next: (res) => {
+          this.menus = res;
+        },
+      });
+  }
+
+  onAddBTN(e: void) {
+    this.dialog
+      .open(ItemsListComponent, {
+        data: this.menus,
+        hasBackdrop: true,
+        backdropClass: 'backdrop-class',
+        width: '90%',
+      })
+      .afterClosed()
+      .subscribe({
+        next: (res: Array<Item>) => {
+          if (res) {
+            const sItems = this.transactions.map((i) => i.id);
+            const selectedItems = res
+              .filter((i) => !sItems.includes(i.name))
+              .map((item) => {
+                return {
+                  id: item.name,
+                  cost: item.basePrice.amount - item.basePrice.discount,
+                  item: item,
+                  quantity: 1,
+                };
+              });
+            this.transactions = this.transactions.concat(selectedItems);
+            this.cdr.detectChanges();
+          }
+        },
+        error: (err) => {
+          console.log('ItemsListComponent error', err);
+        },
+      });
+  }
+
+  getItemCost(transaction: any) {
+    return transaction.cost * transaction.quantity;
+  }
+
+  onSubmitBTN(e: void) {
+    if (this.restaurantId) {
+      const transaction: TransactionSlip = {
+        items: this.transactions.map((t) => {
+          t.item.sellCount = t.quantity;
+          return t.item;
+        }),
+        comment: '',
+        finalPrice: {
+          amount: this.getTotalCost(),
+          discount: 0,
+        },
+        methodType: 'CASH',
+        restaurantId: this.restaurantId,
+      };
+      this.handleTransaction(transaction);
     }
   }
-  getAllFriends(friends: Array<string>) {
-    this._userProfileService.getUsersByIds(friends).subscribe({
-      next: (res) => {
-        console.log('any', res);
-        this.contacts = res.map((user) => {
-          return {
-            id: user.id,
-            username: user.username,
-            avatarId: user.profilePictureUrl,
-            status: user.status,
-            email: user.email,
-          };
-        });
-      },
-    });
+
+  handleTransaction(transaction: TransactionSlip) {
+    transaction;
+    this.dialog
+      .open(TransactionComponent, {
+        data: transaction,
+        hasBackdrop: true,
+        backdropClass: 'backdrop-class',
+        width: '90%',
+      })
+      .afterClosed()
+      .subscribe({
+        next: () => {
+          this.transactions = [];
+          this.cdr.detectChanges();
+        },
+      });
   }
-  onChatSelection(contact: any) {
-    console.log('onChatSelection', contact);
-    this.selectedChat = contact;
-    console.log('selectedChat', this.selectedChat);
-    if (this.user?.id && this.selectedChat?.id) {
-      this._messageService
-        .getChatBySenderAndReceiver(this.user?.id, this.selectedChat?.id)
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe({
-          next: (res) => {
-            console.log('this.selectedChat?.id', res);
-          },
-        });
+
+  addQuantity(selectedTransaction: Transaction) {
+    const transaction = this.transactions.find(
+      (t) => t.id === selectedTransaction.id
+    );
+    if (transaction) {
+      transaction.quantity++;
     }
+  }
+
+  reduceQuantity(selectedTransaction: Transaction) {
+    const transaction = this.transactions.find(
+      (t) => t.id === selectedTransaction.id
+    );
+    if (transaction && transaction.quantity) {
+      transaction.quantity--;
+    }
+  }
+
+  /** Gets the total cost of all transactions. */
+  getTotalCost() {
+    return this.transactions
+      .map((t) => t.cost * t.quantity)
+      .reduce((acc, value) => acc + value, 0);
+  }
+
+  getTotalItem() {
+    return this.transactions
+      .map((t) => t.quantity)
+      .reduce((acc, value) => acc + value, 0);
+  }
+
+  onMenuClick() {
+    this.router.navigateByUrl(`/home`);
   }
 }

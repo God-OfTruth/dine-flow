@@ -1,0 +1,38 @@
+<mat-card class="w-full flex flex-col h-full justify-between gap-6 p-6">
+  <div class="flex w-full justify-center">Tea Day</div>
+  <div class="flex py-4 flex-col gap-2">
+    @if(data?.items?.length){ @for(item of data?.items; track item){
+    <div class="flex w-full justify-between">
+      <div class="flex">
+        {{ item?.name }}
+      </div>
+      <div class="flex">
+        {{ item?.sellCount }}
+      </div>
+      <div class="flex">
+        {{
+          item?.sellCount *
+            (item?.basePrice?.amount - item?.basePrice?.discount)
+        }}
+      </div>
+    </div>
+    } }
+  </div>
+  <div class="flex w-full gap-4 justify-center" [formGroup]="transactionForm">
+    <mat-radio-group aria-label="Select an option" formControlName="methodType">
+      @for(item of [ 'UPI', 'CASH', 'CARD',]; track item;){
+      <mat-radio-button [value]="item">{{ item }}</mat-radio-button>
+      }
+    </mat-radio-group>
+  </div>
+  <!-- Optional -->
+  <div class="flex" [formGroup]="transactionForm">
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>Customer Mobile Number</mat-label>
+      <input type="text" matInput formControlName="userMobileNumber" />
+    </mat-form-field>
+  </div>
+  <div class="flex w-full justify-end p-4">
+    <button mat-button (click)="onSave()">Submit</button>
+  </div>
+</mat-card>

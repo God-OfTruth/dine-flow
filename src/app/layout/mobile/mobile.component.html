@@ -1,70 +1,40 @@
-<div class="flex h-full w-full flex-col">
-  <app-toolbar class="sticky top-0"></app-toolbar>
-  <mat-divider [inset]="true"></mat-divider>
-  <div class="w-full h-full">
-    <table mat-table [dataSource]="transactions" class="w-full h-full">
-      <!-- Item Column -->
-      <ng-container matColumnDef="item">
-        <th mat-header-cell *matHeaderCellDef>Item</th>
-        <td mat-cell *matCellDef="let transaction">{{ transaction.item }}</td>
-        <td mat-footer-cell *matFooterCellDef>Total</td>
-      </ng-container>
-
-      <!-- Quantity Column -->
-      <ng-container matColumnDef="quantity">
-        <th mat-header-cell *matHeaderCellDef>Quantity</th>
-        <td mat-cell *matCellDef="let transaction">
-          <div class="flex">
-            <mat-icon (click)="reduceQuantity(transaction)"
-              ><span> remove </span>
-            </mat-icon>
-            <input
-              class="bg-inherit w-6 text-center"
-              type="number"
-              matInput
-              [value]="transaction.quantity"
-            />
-            <mat-icon (click)="addQuantity(transaction)">
-              <span> add </span>
-            </mat-icon>
+<div class="flex flex-col h-full w-full">
+  <app-toolbar class="sticky top-0" (onMenu)="onMenuClick()"></app-toolbar>
+  <ng-container>
+    <mat-drawer-container class="h-full w-full gap-2" autosize>
+      <mat-drawer #drawer class="h-full pr-2 w-full" mode="side" opened="false">
+        <mat-list class="border border-slate-700 border-l-0 h-full rounded-2xl">
+          @for (route of routes; track route) {
+          <div
+            class="flex rounded-xl mx-2"
+            [ngClass]="{ 'bg-slate-700': route.selected }"
+          >
+            <mat-list-item
+              class="hover:bg-slate-800"
+              (click)="onRouteSelection(route)"
+            >
+              <mat-icon matListItemIcon>{{ route.icon }}</mat-icon>
+              <div matListItemTitle>{{ route.name }}</div>
+              <div matListItemLine>
+                <span class="text-sm text-gray-500">{{
+                  route.description
+                }}</span>
+              </div>
+            </mat-list-item>
           </div>
-        </td>
-        <td mat-footer-cell *matFooterCellDef>
-          <div class="flex text-center">
-            <span>{{ getTotalItem() }}</span>
-          </div>
-        </td>
-      </ng-container>
-
-      <!-- Cost Column -->
-      <ng-container matColumnDef="cost">
-        <th mat-header-cell *matHeaderCellDef>Cost</th>
-        <td mat-cell *matCellDef="let transaction">
-          {{ transaction.cost | currency : "INR" }}
-        </td>
-        <td mat-footer-cell *matFooterCellDef>
-          <div class="flex text-center">
-            {{ getTotalCost() | currency : "INR" }}
-          </div>
-        </td>
-      </ng-container>
-
-      <tr
-        mat-header-row
-        *matHeaderRowDef="displayedColumns"
-        class="sticky top-10"
-      ></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      <tr
-        mat-footer-row
-        *matFooterRowDef="displayedColumns"
-        class="sticky bottom-10"
-      ></tr>
-    </table>
-  </div>
-  <app-bottom-panel
-    class="sticky bottom-0"
-    (onAdd)="onAddBTN($event)"
-    (onSubmit)="onSubmitBTN($event)"
-  ></app-bottom-panel>
+          }
+        </mat-list>
+      </mat-drawer>
+      @if (true) {
+      <div class="flex w-full h-full flex-col justify-center items-center">
+        @for (item of restaurants; track $index) {
+        <mat-card class="w-max p-2" (click)="routeRestaurant(item)">{{
+          item.name
+        }}</mat-card>
+        }
+      </div>
+      <router-outlet></router-outlet>
+      }
+    </mat-drawer-container>
+  </ng-container>
 </div>

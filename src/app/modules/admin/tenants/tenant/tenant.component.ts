@@ -15,6 +15,7 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { UserProfileService } from 'app/services/user-profile.service';
 import { UsersService } from 'app/services/users.service';
 
 @Component({
@@ -34,15 +35,31 @@ export class TenantComponent implements OnInit {
   private _dialogRef = inject(MatDialogRef<TenantComponent>);
   private data = inject(MAT_DIALOG_DATA);
   private _userService = inject(UsersService);
+  private _userProfileService = inject(UserProfileService);
 
   userForm = new FormGroup({
     username: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
     mobileNumber: new FormControl('', [Validators.required]),
   });
+
+  userProfile = new FormGroup({
+    profileId: new FormControl(null, [Validators.required]),
+    count: new FormControl(null, [Validators.required]),
+  });
+
   ngOnInit(): void {
     console.log('Create new Tenant', this.data);
     this.userForm.patchValue(this.data);
+    this._userProfileService.getProfileById(this.data.profileId).subscribe({
+      next: (res) => {
+        console.log('USER Profile', res);
+        this.userProfile.patchValue({
+          profileId: res.id,
+          count: res.restaurantsLicensed,
+        });
+      },
+    });
   }
 
   onSave() {
@@ -59,6 +76,21 @@ export class TenantComponent implements OnInit {
           next: (res) => {
             console.log('create', res);
             this._dialogRef.close();
+          },
+        });
+    }
+  }
+
+  updateRestaurantsLicensed() {
+    if (this.userProfile.value.profileId && this.userProfile.value.count) {
+      this._userProfileService
+        .updateRestaurantLicensed(
+          this.userProfile.value.profileId,
+          this.userProfile.value.count
+        )
+        .subscribe({
+          next: (res) => {
+            console.log('this.userProfile.value.profileId', res);
           },
         });
     }

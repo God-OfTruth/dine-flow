@@ -1,6 +1,7 @@
 import { Price } from './price.model';
 
 export interface Item {
+  id: string;
   name: string;
   description: string;
   tags: string[];

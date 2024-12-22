@@ -85,7 +85,11 @@ export class MenuComponent implements OnInit {
       .afterClosed()
       .subscribe({
         next: (item: any) => {
-          this.items.push(item);
+          console.log('yWSV4', item);
+
+          if (item) {
+            this.items.push(item);
+          }
         },
       });
     // const form = this.fb.group({

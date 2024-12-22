@@ -6,6 +6,7 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -41,14 +42,14 @@ export class ItemComponent implements OnInit {
   private data = inject(MAT_DIALOG_DATA);
 
   form = new FormGroup({
-    name: new FormControl(),
+    name: new FormControl(null, [Validators.required]),
     description: new FormControl(),
     tags: new FormControl([]),
     mediaIds: new FormControl([]),
     mainMediaId: new FormControl(),
     basePrice: new FormGroup({
       discount: new FormControl(),
-      amount: new FormControl(),
+      amount: new FormControl(null, [Validators.required]),
     }),
     enabled: new FormControl(false),
     sellCount: new FormControl(),

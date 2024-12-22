@@ -81,6 +81,12 @@ export class LayoutComponent implements OnInit {
   ngOnInit(): void {
     this.selectedRoute = this.router.url;
     this.routes.forEach((r) => (r.selected = r.uri === this.selectedRoute));
+    this.router.events.subscribe(() => {
+      // Access current route snapshot and clean it
+      const url = this.activatedRoute.snapshot.pathFromRoot
+        .map((segment) => segment.routeConfig?.path || '')
+        .join('/');
+    });
   }
 
   selectedRoute: string = this.routes[0].id;
