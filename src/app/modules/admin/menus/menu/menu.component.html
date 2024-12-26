@@ -32,7 +32,6 @@
     @if(items.length){
     <div class="flex gap-2 w-full h-80 p-4 overflow-auto" formArrayName="items">
       @for (item of items; track $index) {
-      <!-- <div class="flex gap-2"> -->
       <mat-card class="w-1/6 h-fit" appearance="outlined">
         <mat-card-header>
           <div
@@ -45,13 +44,16 @@
         <!-- Need to Update -->
         <img mat-card-image src="assets/blacklabra.webp" />
         <mat-card-actions>
-          <button mat-button appearance="outlined" (click)="onViewItem(item)">
+          <button
+            mat-button
+            appearance="outlined"
+            (click)="onViewItem(item, $index)"
+          >
             View
           </button>
           <button mat-button appearance="outlined">Update</button>
         </mat-card-actions>
       </mat-card>
-      <!-- </div> -->
       }
     </div>
     }

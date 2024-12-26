@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import {
-  FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -62,15 +61,12 @@ export class MenuComponent implements OnInit {
     key: string;
     value: string;
   }[] = [];
+
   ngOnInit(): void {
     console.log('data', this.data);
     this.form.patchValue(this.data);
     this.items = this.data?.items ?? [];
   }
-
-  // get items(): FormArray {
-  //   return this.form.get('items') as FormArray;
-  // }
 
   addItems() {
     this.dialog
@@ -79,49 +75,31 @@ export class MenuComponent implements OnInit {
         backdropClass: 'backdrop-class',
         disableClose: true,
         data: null,
-        // height: '80%',
         width: '80%',
       })
       .afterClosed()
       .subscribe({
         next: (item: any) => {
-          console.log('yWSV4', item);
-
           if (item) {
             this.items.push(item);
           }
         },
       });
-    // const form = this.fb.group({
-    //   name: new FormControl(),
-    //   description: new FormControl([]),
-    //   tags: new FormControl(),
-    //   mediaIds: new FormControl(),
-    //   mainMediaId: new FormControl(),
-    //   basePrice: new FormGroup({
-    //     discount: new FormControl(),
-    //     amount: new FormControl(),
-    //   }),
-    //   enabled: new FormControl(),
-    //   sellCount: new FormControl(),
-    // });
-    // this.items.push(form);
   }
 
-  onViewItem(item: Item) {
+  onViewItem(item: Item, index: number) {
     this.dialog
       .open(ItemComponent, {
         hasBackdrop: true,
         backdropClass: 'backdrop-class',
         disableClose: true,
         data: item,
-        // height: '80%',
         width: '80%',
       })
       .afterClosed()
       .subscribe({
         next: (item: any) => {
-          // this.items.push(item);
+          this.form.value.items[index] = item;
         },
       });
   }
@@ -134,7 +112,6 @@ export class MenuComponent implements OnInit {
     this.form.patchValue({
       items: this.items,
     });
-    console.log('onSave()', this.form.value, this.items);
     if (this.form.valid) {
       const val = this.form.value;
       const items: any[] = val.items ?? [];
@@ -149,7 +126,6 @@ export class MenuComponent implements OnInit {
         })
         .subscribe({
           next: (res) => {
-            console.log('create', res);
             this._dialogRef.close();
           },
           error: (err) => {
