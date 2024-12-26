@@ -1,3 +1,91 @@
-<mat-card
-  class="flex border h-full w-full p-2 border-slate-700 rounded-2xl"
-></mat-card>
+<mat-card class="flex border h-full w-full p-2 border-slate-700 rounded-2xl">
+  <div class="flex w-full p-2 text-xl">Reports</div>
+  <div class="flex w-full gap-2" [formGroup]="filterForm">
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>Restaurant</mat-label>
+      <mat-select formControlName="restaurant">
+        @for (option of restaurants; track option) {
+        <mat-option [value]="option.value">{{ option.key }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>Payment Method</mat-label>
+      <mat-select formControlName="paymentMethod">
+        @for (option of paymentOptions; track option) {
+        <mat-option [value]="option.value">{{ option.key }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>Time Span</mat-label>
+      <mat-select formControlName="time">
+        @for (option of timeSpanOption; track option) {
+        <mat-option [value]="option.value">{{ option.key }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="flex h-full overflow-auto">
+    <table mat-table [dataSource]="transactions" class="w-full h-fit">
+      <!-- Item Column -->
+      <ng-container matColumnDef="items">
+        <th mat-header-cell *matHeaderCellDef>Items</th>
+        <td mat-cell *matCellDef="let transaction">
+          <mat-chip-set cdkDropList cdkDropListOrientation="horizontal">
+            @for (item of transaction.items; track item.name) {
+            <mat-chip class="example-box" cdkDrag>{{ item.name }}</mat-chip>
+            }
+          </mat-chip-set>
+        </td>
+        <td mat-footer-cell *matFooterCellDef>Total</td>
+      </ng-container>
+
+      <!-- payment_method -->
+      <ng-container matColumnDef="payment_method">
+        <th mat-header-cell *matHeaderCellDef>Payment Method</th>
+        <td mat-cell *matCellDef="let transaction">
+          {{ transaction.methodType }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+      <!-- amount -->
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef>Amount</th>
+        <td mat-cell *matCellDef="let transaction">
+          {{ transaction.finalPrice.amount | currency : "INR" }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef>
+          <div class="flex text-center">
+            <span>{{ getTotalAmount() | currency : "INR" }}</span>
+          </div>
+        </td>
+      </ng-container>
+      <!-- transaction_date -->
+      <ng-container matColumnDef="transaction_date">
+        <th mat-header-cell *matHeaderCellDef>Transaction At</th>
+        <td mat-cell *matCellDef="let transaction">
+          {{ transaction.createdDate | date : "dd MMM HH:mm" }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <tr
+        mat-header-row
+        *matHeaderRowDef="displayedColumns"
+        class="sticky top-0 bg-current"
+      ></tr>
+      <tr
+        class="h-2"
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+      ></tr>
+
+      <tr
+        mat-footer-row
+        *matFooterRowDef="displayedColumns"
+        class="sticky bottom-0 border-t-2 border-slate-700"
+      ></tr>
+    </table>
+  </div>
+</mat-card>

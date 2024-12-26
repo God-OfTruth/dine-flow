@@ -13,4 +13,10 @@ export class TransactionService {
   saveTransaction(payload: TransactionSlip) {
     return this._http.post(`${this.api_base}api/transactions`, payload);
   }
+
+  getAllTransactionsByRestaurant(id: string) {
+    return this._http.get<Array<any>>(
+      `${this.api_base}api/transactions/restaurant/${id}`
+    );
+  }
 }
