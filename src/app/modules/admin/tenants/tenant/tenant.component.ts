@@ -50,22 +50,27 @@ export class TenantComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('Create new Tenant', this.data);
-    this.userForm.patchValue(this.data);
-    this._userProfileService.getProfileById(this.data.profileId).subscribe({
-      next: (res) => {
-        console.log('USER Profile', res);
-        this.userProfile.patchValue({
-          profileId: res.id,
-          count: res.restaurantsLicensed,
-        });
-      },
-    });
+    if (this.data) {
+      this.userForm.patchValue(this.data);
+      this._userProfileService.getProfileById(this.data?.profileId).subscribe({
+        next: (res) => {
+          console.log('USER Profile', res);
+          this.userProfile.patchValue({
+            profileId: res.id,
+            count: res.restaurantsLicensed,
+          });
+        },
+      });
+    } else {
+      this.userProfile.disable();
+    }
   }
 
   onSave() {
     console.log('onSave()', this.userForm.value);
     if (this.userForm.valid) {
       const val = this.userForm.value;
+      this.userForm.disable();
       this._userService
         .createTenant({
           email: val.email ?? '',

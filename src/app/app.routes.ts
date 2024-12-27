@@ -26,6 +26,11 @@ export const routes: Routes = [
         path: 'sign-up',
         loadChildren: () => import('app/modules/auth/sign-up/sign-up.routes'),
       },
+      {
+        path: 'reset-password',
+        loadChildren: () =>
+          import('app/modules/auth/reset-password/reset-password.routes'),
+      },
     ],
   },
   {

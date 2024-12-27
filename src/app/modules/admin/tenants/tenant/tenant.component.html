@@ -28,7 +28,7 @@
       <button
         mat-button
         (click)="updateRestaurantsLicensed()"
-        [disabled]="userProfile.invalid"
+        [disabled]="userProfile.invalid || userProfile.disabled"
       >
         Save
       </button>
@@ -36,7 +36,11 @@
   </mat-dialog-content>
   <mat-dialog-actions align="end">
     <button mat-stroked-button mat-dialog-close>Cancel</button>
-    <button mat-button (click)="onSave()" [disabled]="userForm.invalid">
+    <button
+      mat-button
+      (click)="onSave()"
+      [disabled]="userForm.invalid || userForm.disabled"
+    >
       Save
     </button>
   </mat-dialog-actions>
