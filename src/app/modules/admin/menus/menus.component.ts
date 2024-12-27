@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -16,6 +21,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MenuService } from 'app/services/menu.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Menu } from 'app/models/menu.model';
+import { RestaurantsService } from 'app/services/restaurants.service';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-menus',
@@ -29,13 +36,22 @@ import { Menu } from 'app/models/menu.model';
     MatIconModule,
     TableComponent,
     MatButtonModule,
+    MatSelectModule,
   ],
   templateUrl: './menus.component.html',
 })
 export class MenusComponent implements OnInit, OnDestroy {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   private _menuService = inject(MenuService);
+  private _restaurantService = inject(RestaurantsService);
   private dialog = inject(MatDialog);
+  restaurants: Array<{
+    key: string;
+    value: string;
+  }> = [];
+  form = new FormGroup({
+    restaurant: new FormControl(''),
+  });
   columns: Array<TableDataSource> = [
     {
       header: 'Name',
