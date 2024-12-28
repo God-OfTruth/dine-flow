@@ -10,5 +10,7 @@ RUN npm run build --prod
 FROM nginx:latest AS ngi
 # Copy the built files from Angular (now in dist/dine-flow/browser/)
 COPY --from=build /app/dist/dine-flow/browser /usr/share/nginx/html
+
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 80
