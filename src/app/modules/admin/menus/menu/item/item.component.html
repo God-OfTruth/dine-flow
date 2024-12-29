@@ -24,8 +24,39 @@
         <label>Is Active</label>
         <mat-checkbox formControlName="enabled"></mat-checkbox>
       </div>
+      <div class="flex h-full items-center w-max">
+        <button mat-fab extended (click)="addItemOption()">
+          <mat-icon>add</mat-icon>
+          Add Option
+        </button>
+      </div>
     </div>
-    <div class="flex w-full p-4 gap-2" formGroupName="basePrice">
+    <div class="flex w-full gap-8 justify-between p-4">
+      <div
+        class="w-full grid grid-cols-2 gap-2 gap-x-8"
+        formArrayName="itemOptions"
+      >
+        @for (itemControl of itemOptions.controls; track $index) {
+        <div class="flex gap-2" [formGroupName]="$index">
+          <mat-form-field class="w-full" appearance="outline">
+            <mat-label>Option Name</mat-label>
+            <input type="text" matInput formControlName="option" />
+          </mat-form-field>
+          <mat-form-field class="w-full" appearance="outline">
+            <mat-label>Option Price</mat-label>
+            <input type="number" matInput formControlName="price" />
+          </mat-form-field>
+          <div class="flex w-4">
+            <button mat-mini-fab (click)="removeItemOption($index)">
+              <mat-icon>remove</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        }
+      </div>
+    </div>
+    <!-- <div class="flex w-full p-4 gap-2" formGroupName="basePrice">
       <mat-form-field class="w-full" appearance="outline">
         <mat-label>Amount</mat-label>
         <input type="number" matInput formControlName="amount" />
@@ -34,7 +65,7 @@
         <mat-label>Discount</mat-label>
         <input type="number" matInput formControlName="discount" />
       </mat-form-field>
-    </div>
+    </div> -->
   </mat-dialog-content>
   <mat-dialog-actions align="end">
     <button mat-stroked-button mat-dialog-close>Cancel</button>

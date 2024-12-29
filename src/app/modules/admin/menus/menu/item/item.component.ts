@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import {
+  FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -17,6 +18,7 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 
@@ -33,6 +35,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatCheckboxModule,
     MatOptionModule,
     MatSelectModule,
+    MatIconModule,
   ],
   templateUrl: './item.component.html',
 })
@@ -47,10 +50,7 @@ export class ItemComponent implements OnInit {
     tags: new FormControl([]),
     mediaIds: new FormControl([]),
     mainMediaId: new FormControl(),
-    basePrice: new FormGroup({
-      discount: new FormControl(),
-      amount: new FormControl(null, [Validators.required]),
-    }),
+    itemOptions: this.fb.array([]),
     enabled: new FormControl(false),
     sellCount: new FormControl(),
     taxes: new FormControl(null),
@@ -62,12 +62,34 @@ export class ItemComponent implements OnInit {
   }[] = [];
 
   ngOnInit(): void {
-    console.log('data', this.data);
-    this.form.patchValue(this.data);
+    if (this.data) {
+      this.form.patchValue(this.data);
+      this.data.itemOptions.forEach((itemOption: any) => {
+        this.addItemOption(itemOption);
+      });
+    }
   }
 
   onSave() {
-    console.log('onSave()', this.form.value);
     this._dialogRef.close(this.form.value);
+  }
+
+  get itemOptions(): FormArray {
+    return this.form.get('itemOptions') as FormArray;
+  }
+
+  addItemOption(val = null) {
+    const form = this.fb.group({
+      option: new FormControl(null, [Validators.required]),
+      price: new FormControl(null, [Validators.required]),
+    });
+    if (val) {
+      form.patchValue(val);
+    }
+    this.itemOptions.push(form);
+  }
+
+  removeItemOption(index: number) {
+    this.itemOptions.removeAt(index);
   }
 }
