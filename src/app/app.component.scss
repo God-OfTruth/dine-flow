@@ -1,0 +1,21 @@
+::ng-deep {
+  .mat-mdc-snack-bar-container .mdc-snackbar__surface {
+    background-color: transparent !important;
+
+    color: #fff !important;
+  }
+  .red-snackbar {
+    background-color: #ff4b4b99 !important;
+    border: 2px solid #ff000099;
+    backdrop-filter: blur(90px);
+    border-radius: 0.5rem !important;
+    color: white;
+  }
+  .green-snackbar {
+    background-color: #2baa3899 !important;
+    border: 2px solid #00ff2699;
+    backdrop-filter: blur(90px);
+    border-radius: 0.5rem !important;
+    color: white;
+  }
+}

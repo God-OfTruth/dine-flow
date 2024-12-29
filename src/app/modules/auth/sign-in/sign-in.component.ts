@@ -52,7 +52,6 @@ export class SignInComponent {
   });
   showAlert: boolean = false;
   signIn() {
-    console.log('Form', this.signInForm.value);
     // Return if the form is invalid
     if (this.signInForm.invalid) {
       return;

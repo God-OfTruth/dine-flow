@@ -15,6 +15,7 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { CommonService, MessageIds } from 'app/services/common.service';
 import { UserProfileService } from 'app/services/user-profile.service';
 import { UsersService } from 'app/services/users.service';
 
@@ -35,6 +36,7 @@ export class TenantComponent implements OnInit {
   private _dialogRef = inject(MatDialogRef<TenantComponent>);
   private data = inject(MAT_DIALOG_DATA);
   private _userService = inject(UsersService);
+  private _commonService = inject(CommonService);
   private _userProfileService = inject(UserProfileService);
 
   userForm = new FormGroup({
@@ -49,12 +51,10 @@ export class TenantComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    console.log('Create new Tenant', this.data);
     if (this.data) {
       this.userForm.patchValue(this.data);
       this._userProfileService.getProfileById(this.data?.profileId).subscribe({
         next: (res) => {
-          console.log('USER Profile', res);
           this.userProfile.patchValue({
             profileId: res.id,
             count: res.restaurantsLicensed,
@@ -80,6 +80,13 @@ export class TenantComponent implements OnInit {
         .subscribe({
           next: (res) => {
             console.log('create', res);
+            this._commonService.changeMessage({
+              id: MessageIds.SNACKBAR,
+              data: {
+                message: 'Tenant created successfully',
+                type: 'success',
+              },
+            });
             this._dialogRef.close();
           },
         });
@@ -95,7 +102,14 @@ export class TenantComponent implements OnInit {
         )
         .subscribe({
           next: (res) => {
-            console.log('this.userProfile.value.profileId', res);
+            this._commonService.changeMessage({
+              id: MessageIds.SNACKBAR,
+              data: {
+                message: 'Restaurants licensed updated successfully',
+                type: 'success',
+              },
+            });
+            this._dialogRef.close();
           },
         });
     }

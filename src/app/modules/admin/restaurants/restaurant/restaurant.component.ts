@@ -21,7 +21,9 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MenuService } from 'app/services/menu.service';
 import { Subject, takeUntil } from 'rxjs';
-import { UsersService } from 'app/services/users.service';
+import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-restaurant',
@@ -35,6 +37,8 @@ import { UsersService } from 'app/services/users.service';
     MatDialogModule,
     MatOptionModule,
     MatSelectModule,
+    MatChipsModule,
+    MatIconModule,
   ],
   templateUrl: './restaurant.component.html',
 })
@@ -43,8 +47,9 @@ export class RestaurantComponent implements OnInit {
   private _dialogRef = inject(MatDialogRef<TenantComponent>);
   private _restaurantService = inject(RestaurantsService);
   private _menuService = inject(MenuService);
-  private _tenantService = inject(UsersService);
   private data = inject(MAT_DIALOG_DATA);
+
+  announcer = inject(LiveAnnouncer);
 
   form = new FormGroup({
     id: new FormControl(null, []),
@@ -72,10 +77,6 @@ export class RestaurantComponent implements OnInit {
     key: string;
     value: string;
   }[] = [];
-  managers: {
-    key: string;
-    value: string;
-  }[] = [];
   staffs: {
     key: string;
     value: string;
@@ -83,30 +84,62 @@ export class RestaurantComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllMenus();
-    this.getAllUsers();
-    this.form.patchValue(this.data);
+    // this.getAllUsers();
+    if (this.data) {
+      this.form.patchValue(this.data);
+    }
   }
-  getAllUsers() {
-    this._tenantService
-      .getAllUsers()
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe({
-        next: (res) => {
-          this.managers = res.map((user) => {
-            return {
-              key: user.username,
-              value: user.id,
-            };
-          });
-          this.staffs = res.map((user) => {
-            return {
-              key: user.username,
-              value: user.id,
-            };
-          });
-        },
+
+  get managers(): string[] {
+    return this.form.controls.managers.value ?? [];
+  }
+
+  set managers(value: string[]) {
+    this.form.patchValue({
+      managers: value,
+    });
+  }
+
+  removeManager(manager: any) {
+    this.managers = this.managers.filter((m) => m !== manager);
+  }
+
+  addManager(event: MatChipInputEvent) {
+    const value = (event.value || '').trim();
+    // Add our keyword
+    if (value) {
+      this.form.patchValue({
+        managers: [...this.managers, value],
       });
+      this.announcer.announce(`added ${value} to reactive form`);
+    }
+
+    // Clear the input value
+    event.chipInput!.clear();
   }
+
+  // getAllUsers() {
+  //   this._tenantService
+  //     .getAllUsers()
+  //     .pipe(takeUntil(this._unsubscribeAll))
+  //     .subscribe({
+  //       next: (res) => {
+  //         this.managers = res.map((user) => {
+  //           return {
+  //             key: user.username,
+  //             value: user.id,
+  //           };
+  //         });
+  //         this.staffs = res.map((user) => {
+  //           return {
+  //             key: user.username,
+  //             value: user.id,
+  //           };
+  //         });
+  //       },
+  //     });
+  // }
+
   getAllMenus() {
     this._menuService
       .getAllMenus()
@@ -138,7 +171,7 @@ export class RestaurantComponent implements OnInit {
             plusCode: val.address?.plusCode ?? '',
             shortAddress: val.address?.shortAddress ?? '',
           },
-          managers: val.managers,
+          managers: val.managers ?? [],
           mediaIds: val.mediaIds,
           menuIds: val.menuIds,
           ownerId: null,
