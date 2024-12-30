@@ -26,28 +26,28 @@
       <form class="flex flex-col mt-8 gap-2" [formGroup]="signInForm">
         <!-- username field -->
         <mat-form-field
-          class="w-full border text-zinc-800 rounded-2xl"
+          class="w-full text-zinc-800 rounded-2xl"
           appearance="outline"
         >
+          <mat-label>Username</mat-label>
           <input
             matInput
             autocomplete="username"
-            placeholder="Username"
             [formControlName]="'username'"
           />
         </mat-form-field>
         <!-- Password field -->
         <mat-form-field
-          class="w-full border text-zinc-800 rounded-2xl"
+          class="w-full text-zinc-800 rounded-2xl"
           appearance="outline"
         >
+          <mat-label>Password</mat-label>
           <input
             id="password"
             matInput
             type="password"
             [formControlName]="'password'"
             #passwordField
-            placeholder="Password"
             autocomplete="current-password"
           />
           <button

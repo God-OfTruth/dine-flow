@@ -50,7 +50,7 @@ export const authInterceptor = (
       // Catch "401 Unauthorized" responses
       if (error instanceof HttpErrorResponse && error.status === 401) {
         // Sign out the user if the refresh token expired
-        if (error.error !== 'Refresh Token Expired') {
+        if (error.error !== 'Refresh Token Expired' && authService.refreshToken !== '') {
           // Sign in using the refresh token
           authService.signInUsingToken().subscribe(() => {});
         } else {

@@ -36,11 +36,25 @@
       </mat-form-field>
       <mat-form-field class="w-full" appearance="outline">
         <mat-label>Managers</mat-label>
-        <mat-select formControlName="managers" multiple>
-          @for (item of managers; track item) {
-          <mat-option [value]="item.value">{{ item.key }}</mat-option>
+        <mat-chip-grid
+          #managerChipGrid
+          aria-label="Enter Manager Email keywords"
+          formControlName="managers"
+        >
+          @for (keyword of managers; track keyword) {
+          <mat-chip-row (removed)="removeManager(keyword)">
+            {{ keyword }}
+            <button matChipRemove aria-label="'remove Manager Email' + keyword">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
           }
-        </mat-select>
+        </mat-chip-grid>
+        <input
+          placeholder="Email..."
+          [matChipInputFor]="managerChipGrid"
+          (matChipInputTokenEnd)="addManager($event)"
+        />
       </mat-form-field>
       <mat-form-field class="w-full" appearance="outline">
         <mat-label>Staff</mat-label>

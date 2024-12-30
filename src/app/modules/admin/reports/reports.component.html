@@ -33,8 +33,8 @@
         <th mat-header-cell *matHeaderCellDef>Items</th>
         <td mat-cell *matCellDef="let transaction">
           <mat-chip-set cdkDropList cdkDropListOrientation="horizontal">
-            @for (item of transaction.items; track item.name) {
-            <mat-chip class="example-box" cdkDrag>{{ item.name }}</mat-chip>
+            @for (item of transaction.items; track item.id) {
+            <mat-chip class="example-box" cdkDrag>{{ item.itemName }}</mat-chip>
             }
           </mat-chip-set>
         </td>

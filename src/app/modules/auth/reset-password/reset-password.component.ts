@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterLink } from '@angular/router';
 import { AuthService } from 'app/core/auth.service';
+import { CommonService, MessageIds } from 'app/services/common.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -32,6 +33,7 @@ import { AuthService } from 'app/core/auth.service';
 })
 export class ResetPasswordComponent {
   private _authService = inject(AuthService);
+  private _commonService = inject(CommonService);
   resetForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     // username: new FormControl('', [Validators.required]),
@@ -40,10 +42,15 @@ export class ResetPasswordComponent {
   });
 
   resetPassword() {
-    console.log('Reset password', this.resetForm.value);
     this._authService.resetPassword(this.resetForm.value).subscribe({
-      next: (response) => {
-        console.log('resetPassword', response);
+      next: () => {
+        this._commonService.changeMessage({
+          id: MessageIds.SNACKBAR,
+          data: {
+            message: 'Password reset successfully',
+            type: 'success',
+          },
+        });
       },
     });
   }

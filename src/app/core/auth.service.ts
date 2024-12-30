@@ -144,10 +144,11 @@ export class AuthService {
           // piece of code can replace the token with the refreshed one.
           if (response.accessToken) {
             this.accessToken = response.accessToken;
+            this._authenticated = true;
           }
 
           // Set the authenticated flag to true
-          this._authenticated = true;
+          
 
           // Store the user on the user service
           // this._userService.user = response.user;

@@ -23,6 +23,7 @@ import { MenuService } from 'app/services/menu.service';
 import { ItemComponent } from './item/item.component';
 import { MatCardModule } from '@angular/material/card';
 import { Item } from 'app/models/items.model';
+import { CommonService, MessageIds } from 'app/services/common.service';
 
 @Component({
   selector: 'app-menu',
@@ -45,6 +46,7 @@ export class MenuComponent implements OnInit {
   private _dialogRef = inject(MatDialogRef<MenuComponent>);
   private data = inject(MAT_DIALOG_DATA);
   private _menuService = inject(MenuService);
+  private _commonService = inject(CommonService);
   private fb = inject(FormBuilder);
   private dialog = inject(MatDialog);
 
@@ -125,7 +127,14 @@ export class MenuComponent implements OnInit {
           restaurantIds: val.restaurantIds ?? [],
         })
         .subscribe({
-          next: (res) => {
+        next: (res) => {
+            this._commonService.changeMessage({
+              id: MessageIds.SNACKBAR,
+              data: {
+                message: 'Menu saved successfully',
+                type: 'success',
+              }
+            })
             this._dialogRef.close();
           },
           error: (err) => {

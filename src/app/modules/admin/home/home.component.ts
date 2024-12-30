@@ -15,12 +15,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Router } from '@angular/router';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { Subject, takeUntil } from 'rxjs';
-import { ChatService } from 'app/services/chat.service';
-import { SocketService } from 'app/services/socket.service';
 import { UserProfileService } from 'app/services/user-profile.service';
 
 @Component({

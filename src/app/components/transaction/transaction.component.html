@@ -1,19 +1,20 @@
 <mat-card class="w-full flex flex-col h-full justify-between gap-6 p-6">
   <div class="flex w-full justify-center">Tea Day</div>
-  <div class="flex py-4 flex-col gap-2">
+  <div class="flex py-4 h-48 overflow-auto text-sm flex-col gap-2">
     @if(data?.items?.length){ @for(item of data?.items; track item){
-    <div class="flex w-full justify-between">
-      <div class="flex">
-        {{ item?.name }}
+    <div
+      class="flex w-full justify-between border items-center rounded-2xl p-2 border-slate-700"
+    >
+      <div class="flex w-24 items-center flex-col">
+        <div class="flex">{{ item?.itemName }}</div>
+        <div class="flex">{{ item?.option }}</div>
       </div>
       <div class="flex">
-        {{ item?.sellCount }}
+        <div class="flex">{{ item?.quantity }}</div>
       </div>
+
       <div class="flex">
-        {{
-          item?.sellCount *
-            (item?.basePrice?.amount - item?.basePrice?.discount)
-        }}
+        {{ item?.cost * item?.quantity }}
       </div>
     </div>
     } }
@@ -33,6 +34,7 @@
     </mat-form-field>
   </div>
   <div class="flex w-full justify-end p-4">
+    <button mat-button (click)="onCancel()">Cancel</button>
     <button mat-button (click)="onSave()">Submit</button>
   </div>
 </mat-card>
