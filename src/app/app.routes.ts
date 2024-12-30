@@ -8,9 +8,9 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'admin',
+    redirectTo: 'home',
   },
-  { path: 'signed-in-redirect', pathMatch: 'full', redirectTo: 'admin' },
+  { path: 'signed-in-redirect', pathMatch: 'full', redirectTo: 'home' },
 
   // Auth routes for guests
   {
