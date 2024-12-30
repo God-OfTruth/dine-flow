@@ -3,9 +3,10 @@ import { Price } from './price.model';
 
 export interface Transaction {
   id: string;
+  itemName: string;
   quantity: number;
   cost: number;
-  item: Item;
+  option: string;
 }
 
 export type TransactionSlip = {

@@ -89,17 +89,18 @@ export class HomeComponent implements OnInit, OnDestroy {
       })
       .afterClosed()
       .subscribe({
-        next: (res: Array<Item>) => {
+        next: (res) => {
           if (res) {
             const sItems = this.transactions.map((i) => i.id);
             const selectedItems = res
-              .filter((i) => !sItems.includes(i.name))
-              .map((item) => {
+              .filter((i: any) => !sItems.includes(i.id))
+              .map((item: any) => {
                 return {
-                  id: item.name,
-                  cost: item.basePrice.amount - item.basePrice.discount,
-                  item: item,
+                  id: item.id,
+                  cost: item.cost,
+                  itemName: item.itemName,
                   quantity: 1,
+                  option: item.option,
                 };
               });
             this.transactions = this.transactions.concat(selectedItems);
@@ -118,11 +119,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   onSubmitBTN(e: void) {
     if (this.restaurantId) {
-      const transaction: TransactionSlip = {
-        items: this.transactions.map((t) => {
-          t.item.sellCount = t.quantity;
-          return t.item;
-        }),
+      console.log('this.transactions', this.transactions);
+      const transaction = {
+        items: this.transactions,
         comment: '',
         finalPrice: {
           amount: this.getTotalCost(),
@@ -135,7 +134,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  handleTransaction(transaction: TransactionSlip) {
+  handleTransaction(transaction: any) {
     transaction;
     this.dialog
       .open(TransactionComponent, {
@@ -146,9 +145,11 @@ export class HomeComponent implements OnInit, OnDestroy {
       })
       .afterClosed()
       .subscribe({
-        next: () => {
-          this.transactions = [];
-          this.cdr.detectChanges();
+        next: (res: boolean) => {
+          if (res) {
+            this.transactions = [];
+            this.cdr.detectChanges();
+          }
         },
       });
   }

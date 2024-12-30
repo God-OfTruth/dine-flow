@@ -16,6 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { Item } from 'app/models/items.model';
 import { Menu } from 'app/models/menu.model';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-items-list',
@@ -28,6 +29,7 @@ import { Menu } from 'app/models/menu.model';
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
+    MatExpansionModule,
   ],
   templateUrl: './items-list.component.html',
 })
@@ -37,7 +39,7 @@ export class ItemsListComponent implements OnInit {
   private _dialogRef = inject(MatDialogRef<ItemsListComponent>);
 
   items: Array<Menu> = [];
-  selectedItems: Array<Item> = [];
+  transactions: Array<any> = [];
 
   ngOnInit(): void {
     this.items = this.data.map((m) => {
@@ -50,20 +52,34 @@ export class ItemsListComponent implements OnInit {
   }
 
   onSave() {
-    this._dialogRef.close(this.selectedItems);
+    this._dialogRef.close(this.transactions);
   }
 
-  update(e: MatCheckboxChange) {
-    const menu = this.items.find((m) => m.id === e.source.value.split('_')[0]);
-    const item = menu?.items.find(
-      (i) => i.name === e.source.value.split('_')[1]
-    );
+  update(e: MatCheckboxChange, item: Item) {
+    const option_selected: any = e.source.value;
+    const transaction: {
+      id: string;
+      itemName: string;
+      quantity: number;
+      cost: number;
+      option: string;
+    } | null = {
+      id: `${item.name}_${option_selected.option}`,
+      itemName: item.name,
+      quantity: 1,
+      cost: option_selected.price,
+      option: option_selected.option,
+    };
 
     if (e.checked && item) {
-      this.selectedItems.push(item);
+      this.transactions.push(transaction);
     } else {
-      this.selectedItems.splice(
-        this.selectedItems.findIndex((a) => a.id === item?.id),
+      this.transactions.splice(
+        this.transactions.findIndex(
+          (a) =>
+            a.itemName === transaction.itemName &&
+            a.option === transaction.option
+        ),
         1
       );
     }

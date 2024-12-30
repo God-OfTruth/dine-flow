@@ -1,31 +1,40 @@
 <div class="flex flex-col h-full w-full">
   <mat-dialog-content class="flex">
-    <div class="flex flex-col w-full gap-4">
+    <div class="flex flex-col w-full gap-4 text-sm">
       @for (menu of items; track menu) {
       <mat-card class="flex justify-between">
-        <div class="flex text-xl justify-center p-2">{{ menu.name }}</div>
-        <mat-divider></mat-divider>
-        <div class="flex flex-col gap-2">
-          @for (item of menu.items; track $index) {
-          <div class="flex w-full justify-between items-center">
-            <div class="flex">
-              {{ item.name }}
-            </div>
-            <div class="flex">
-              {{ item.basePrice.amount - item.basePrice.discount }}
-            </div>
-            <div class="flex">
-              <mat-checkbox
-                class="example-margin"
-                (change)="update($event)"
-                [value]="item.id"
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <div class="flex text-base justify-center p-2">{{ menu.name }}</div>
+          </mat-expansion-panel-header>
+
+          <ng-template matExpansionPanelContent>
+            <div class="flex flex-col gap-2 text-sm">
+              @for (item of menu.items; track $index) {
+              <div
+                class="flex w-full flex-col gap-1 justify-between items-center p-2"
               >
-              </mat-checkbox>
+                <div class="flex">
+                  {{ item.name }}
+                </div>
+                <div class="flex">
+                  @for (option of item.itemOptions; track option) {
+                  <mat-checkbox
+                    class="example-margin"
+                    (change)="update($event, item)"
+                    [value]="option"
+                  >
+                    {{ option.option }}
+                  </mat-checkbox>
+                  }
+                </div>
+              </div>
+              }
             </div>
-          </div>
-          }
-        </div>
+          </ng-template>
+        </mat-expansion-panel>
       </mat-card>
+
       }
     </div>
   </mat-dialog-content>

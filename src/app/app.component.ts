@@ -40,7 +40,7 @@ export class AppComponent implements OnInit, OnDestroy {
       data.type === 'success' ? 'green-snackbar' : 'red-snackbar';
     this._snackbar.openFromComponent(AlertSnackbarComponent, {
       data: data,
-      duration: 50 * 1000,
+      duration: 5 * 1000,
       horizontalPosition: 'end',
       verticalPosition: 'bottom',
       panelClass: css_class,

@@ -9,14 +9,12 @@
         <td mat-cell *matCellDef="let transaction">
           <div class="flex flex-col w-full justify-center text-center">
             <div class="flex w-full justify-center">
-              {{ transaction.item.name }}
+              <span>{{ transaction.itemName }}</span>
+              <span> ({{ transaction.option }})</span>
             </div>
             <div class="flex w-full gap-2 justify-center">
               <div class="flex">
-                <span class="text-slate-300">{{
-                  transaction.item.basePrice.amount -
-                    transaction.item.basePrice.discount
-                }}</span>
+                <span class="text-slate-300">{{ transaction.cost }}</span>
               </div>
             </div>
           </div>
