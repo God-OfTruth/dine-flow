@@ -14,9 +14,20 @@ export class TransactionService {
     return this._http.post(`${this.api_base}api/transactions`, payload);
   }
 
-  getAllTransactionsByRestaurant(id: string) {
-    return this._http.get<Array<any>>(
-      `${this.api_base}api/transactions/restaurant/${id}`
+  getAllTransactionsByFilter(
+    startTime: number,
+    endTime: number,
+    restaurantIds: string[],
+    methodTypes: string[]
+  ) {
+    return this._http.post<Array<any>>(
+      `${this.api_base}api/transactions/filter`,
+      {
+        startTime: startTime,
+        endTime: endTime,
+        methodType: methodTypes,
+        restaurants: restaurantIds,
+      }
     );
   }
 }

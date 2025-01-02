@@ -3,7 +3,7 @@
   <div class="flex w-full gap-2" [formGroup]="filterForm">
     <mat-form-field class="w-full" appearance="outline">
       <mat-label>Restaurant</mat-label>
-      <mat-select formControlName="restaurant">
+      <mat-select formControlName="restaurant" multiple>
         @for (option of restaurants; track option) {
         <mat-option [value]="option.value">{{ option.key }}</mat-option>
         }
@@ -11,7 +11,7 @@
     </mat-form-field>
     <mat-form-field class="w-full" appearance="outline">
       <mat-label>Payment Method</mat-label>
-      <mat-select formControlName="paymentMethod">
+      <mat-select formControlName="paymentMethod" multiple>
         @for (option of paymentOptions; track option) {
         <mat-option [value]="option.value">{{ option.key }}</mat-option>
         }

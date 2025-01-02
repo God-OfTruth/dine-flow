@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { NoAuthGuard } from './core/guards/noAuth.guard';
 import { AuthGuard } from './core/guards/auth.guard';
 import { LayoutComponent } from './layout/layout/layout.component';
-import { MobileComponent } from './layout/mobile/mobile.component';
 
 export const routes: Routes = [
   {
