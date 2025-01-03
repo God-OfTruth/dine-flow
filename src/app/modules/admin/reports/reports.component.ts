@@ -15,6 +15,7 @@ import { RestaurantsService } from 'app/services/restaurants.service';
 import { TransactionService } from 'app/services/transaction.service';
 import { Subject, takeUntil } from 'rxjs';
 import { MatChipsModule } from '@angular/material/chips';
+import { DateTime } from 'luxon';
 
 @Component({
   selector: 'app-reports',
@@ -34,11 +35,11 @@ import { MatChipsModule } from '@angular/material/chips';
 export class ReportsComponent implements OnInit {
   private _transactionService = inject(TransactionService);
   private _restaurantService = inject(RestaurantsService);
-
+  timeZone = 'Asia/Kolkata';
   filterForm = new FormGroup({
-    restaurant: new FormControl(),
-    time: new FormControl('TODAY'),
-    paymentMethod: new FormControl('CASH'),
+    restaurant: new FormControl([]),
+    time: new FormControl(),
+    paymentMethod: new FormControl([]),
   });
   displayedColumns: string[] = [
     'items',
@@ -49,20 +50,13 @@ export class ReportsComponent implements OnInit {
 
   private destroy$ = new Subject<void>();
   restaurants?: { key: string; value: string }[];
-  timeSpanOption?: { key: string; value: string }[] = [
-    {
-      key: 'Today',
-      value: 'TODAY',
-    },
-    {
-      key: 'Weak',
-      value: 'WEAK',
-    },
-    {
-      key: 'Month',
-      value: 'MONTH',
-    },
-  ];
+  timeSpanOption?: {
+    key: string;
+    value: {
+      start: number;
+      end: number;
+    };
+  }[] = [];
   paymentOptions?: { key: string; value: string }[] = [
     {
       key: 'Cash',
@@ -80,6 +74,41 @@ export class ReportsComponent implements OnInit {
   transactions: any[] = [];
 
   ngOnInit(): void {
+    this.timeSpanOption = [
+      {
+        key: 'Today',
+        value: {
+          start: DateTime.now()
+            .startOf('day')
+            .setZone(this.timeZone)
+            .toMillis(),
+          end: DateTime.now().endOf('day').setZone(this.timeZone).toMillis(),
+        },
+      },
+      {
+        key: 'Weak',
+        value: {
+          start: DateTime.now()
+            .startOf('week')
+            .setZone(this.timeZone)
+            .toMillis(),
+          end: DateTime.now().endOf('week').setZone(this.timeZone).toMillis(),
+        },
+      },
+      {
+        key: 'Month',
+        value: {
+          start: DateTime.now()
+            .startOf('month')
+            .setZone(this.timeZone)
+            .toMillis(),
+          end: DateTime.now().endOf('month').setZone(this.timeZone).toMillis(),
+        },
+      },
+    ];
+    this.filterForm.patchValue({
+      time: this.timeSpanOption[0].value,
+    });
     this.filterForm.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe((res) => {
@@ -92,39 +121,32 @@ export class ReportsComponent implements OnInit {
   getAllRestaurants() {
     this._restaurantService.getAllRestaurants().subscribe({
       next: (res) => {
-        console.log(
-          'return this._http.post(`${this.api_base}api/transactions`, payload);',
-          res
-        );
         this.restaurants = res.map((r) => {
           return {
             key: r.name,
             value: r.id,
           };
         });
-        this.filterForm.patchValue({
-          restaurant: this.restaurants[0].value,
-        });
       },
     });
   }
   getAllTransactions() {
     const filterVal = this.filterForm.value;
-    if (filterVal.restaurant) {
+    if (filterVal) {
       this._transactionService
-        .getAllTransactionsByRestaurant(filterVal.restaurant)
+        .getAllTransactionsByFilter(
+          filterVal.time?.start ?? null,
+          filterVal.time?.end ?? null,
+          filterVal.restaurant ?? [],
+          filterVal.paymentMethod ?? []
+        )
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (res) => {
-            console.log(
-              ' this._transactionService.getAllTransactionsByRestaurant()',
-              res
-            );
             this.transactions = res;
           },
         });
     }
-    // this._transactionService.getAllTransactionsByRestaurant()
   }
 
   getTotalAmount() {
